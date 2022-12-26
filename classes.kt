@@ -21,7 +21,6 @@ open class Class(
         return arrayOf()
     }
     private fun check_deck(deck:Array<Card>){
-        // require(false){"not implemented"}
         // TODO super fucking inefficient
         for(card in deck){
             var occurances = 0
