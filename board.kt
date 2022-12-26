@@ -1,13 +1,17 @@
 
 package board
 
-import classes.CLASS_ALL
+import classes.ALL_CLASSES
 import player.Player
 import cards.Card
 
 class Board(){
-    val all_classes = CLASS_ALL
+    val all_classes = ALL_CLASSES
     var players:Array<Player> = arrayOf()
+    var dmg_cards_target:Player? = null
+    var dmg_cards_target_until_players_next_turn:Player? = null
+
+    // writing
 
     fun writeln(msg:String=""){
         for(player in players){
@@ -46,6 +50,24 @@ class Board(){
             player.writeln(player.toString(show_private=true))
         }
         writeln()
+    }
+
+    // on event
+
+    fun on_game_start(){
+        dmg_cards_target = null
+        dmg_cards_target_until_players_next_turn = null
+
+        for(player in players){
+            player.on_game_start()
+        }
+    }
+
+    fun on_player_turn(player:Player){
+        if(player == dmg_cards_target_until_players_next_turn){
+            dmg_cards_target = null
+            dmg_cards_target_until_players_next_turn = null
+        }
     }
 
     // choosing
@@ -96,6 +118,11 @@ class Board(){
 
     // else
 
+    fun set_dmg_cards_target_until_players_next_turn(dmg_target:Player, until_players_next_turn:Player){
+        dmg_cards_target = dmg_target
+        dmg_cards_target_until_players_next_turn = until_players_next_turn
+    }
+
     fun find_card_owner(card_to_find:Card):Player{
         var found = 0
         var owner:Player? = null
@@ -113,11 +140,22 @@ class Board(){
 
     fun damage_player(caster:Player, damage:Int){
         var targets:Array<Player> = arrayOf()
-        for(player in players){
-            if(player != caster){
-                targets += player
+        
+        if(dmg_cards_target == null){
+            for(player in players){ // TODO we're kinda duplicating code here...
+                if(player.is_dead()){
+                    continue
+                }
+                if(player != caster){
+                    targets += player
+                }
             }
+        }else{
+            // this is fucking cancer shit, `kotlin` thinks that there might be a thread that changes the type of `dmg_cards_target`
+            // and so it doesn't let me assign it normally, it's making me use the retarded `!!` shit fuck
+            targets += dmg_cards_target!! // 2 bitches talked me into bending the rules so that the attacker can also be the target
         }
+
         val target:Player? = caster.choice("select attack target", targets)
         if(target == null){
             return
@@ -139,8 +177,8 @@ class Board(){
                         unready += 1
                     }
                 }
-                if(ready != ready){
-                    writeln("waiting for ${unready} players to ready up")
+                if(unready > 0){
+                    writeln("waiting for ${unready} player(s) to ready up")
                     continue
                 }
                 if(ready <= 1){
@@ -151,9 +189,7 @@ class Board(){
             }
 
             // game start
-            for(player in players){
-                player.on_game_start()
-            }
+            on_game_start()
 
             // game loop
             game_loop@ while(true){

@@ -1,6 +1,6 @@
 
 // run with
-// clear && kotlinc dungeon_meyhem.kt classes.kt cards.kt powers.kt colors.kt player.kt board.kt -include-runtime -d dungeon_meyhem.jar && java -jar dungeon_meyhem.jar 6969
+// clear && kotlinc dungeon_meyhem.kt classes.kt cards.kt colors.kt player.kt board.kt -include-runtime -d dungeon_meyhem.jar && java -jar dungeon_meyhem.jar 6969
 
 package dungeon_mayhem
 

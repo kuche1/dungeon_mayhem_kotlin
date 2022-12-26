@@ -2,8 +2,6 @@
 package classes
 
 import colors.*
-// import cards.Card
-// import cards.CARDS_AZZAN
 import cards.*
 import player.Player
 
@@ -103,9 +101,28 @@ class Class_blorp:Class(
 }
 
 class Class_deliah:Class(
-    name = "Deliah Deathray (unplayable)",
+    name = "Deliah Deathray",
     color = COL_BLUE_DARK,
-)
+){
+    override fun generate_deck_uncked(p:Player):Array<Card>{
+        return arrayOf(
+            Praise_me(p), Praise_me(p),
+            Charm_ray(p), Charm_ray(p),
+            Death_ray(p), Death_ray(p), Death_ray(p),
+            Fashion_police(p), Fashion_police(p),
+            Tyrany_of_beauty(p),
+            Multitask(p), Multitask(p),
+            Beauty_barrage(p), Beauty_barrage(p), Beauty_barrage(p),
+            Mirror_mirror(p), Mirror_mirror(p),
+            Double_trouble(p), Double_trouble(p),
+            Make_it_work(p), Make_it_work(p),
+            Rays_for_days(p), Rays_for_days(p),
+            Laser_show(p), Laser_show(p), Laser_show(p),
+            Me_myself_and_eye(p),
+            Cuter_than_you(p),
+        )
+    }
+}
 
 class Class_dr_tentaculous(
     name:String = "Dr. Tentaculous (unplayable)",
@@ -163,7 +180,7 @@ class Class_sutha(
     color,
 )
 
-val CLASS_ALL = arrayOf(
+val ALL_CLASSES = arrayOf(
     Class_azzan(),
     Class_blorp(),
     Class_deliah(),

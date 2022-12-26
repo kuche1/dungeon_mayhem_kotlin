@@ -409,3 +409,182 @@ class D6_of_doom(
     occur=2,
     dmg=2,
 )
+
+/////////////////////////////////////////////////////////////////////////////// deliah
+
+class Praise_me(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Praise Me",
+    occur=2,
+    draw=3,
+    desc="Each opponent can choose to praise your greatness. ${ICON_DMG} ${ICON_DMG} those who choose not to."
+){
+    override fun special_effect(caster:Player, board:Board){
+        for(player in board.players){
+            if(player.is_dead() || player == caster){
+                continue
+            }
+            // TODO this is retarded and needs to be multithreaded
+            // TODO add a little flavour
+            val choice = player.choice("praise ${caster.toString(short=true)}?", arrayOf("yes", "no"))
+            if(choice == "yes"){
+                board.writeln("${player.toString(short=true)} to ${caster.toString(short=true)}: I love the taste of your semen")
+            }else{
+                player.on_damaged(2, caster)
+            }
+        }
+    }
+}
+
+class Charm_ray(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Charm Ray",
+    occur=2,
+    desc="Until your next turn, choose the target of all ${ICON_DMG} cards."
+){
+    override fun special_effect(caster:Player, board:Board){
+        val target = board.choose_opponent(caster)
+        if(target == null){
+            return
+        }
+        board.set_dmg_cards_target_until_players_next_turn(target, caster)
+    }
+}
+
+class Death_ray(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Death Ray",
+    occur=3,
+    desc="${ICON_DMG} ${ICON_DMG} each opponent with no ${ICON_SHIELD} cards in play. Then destroy all ${ICON_SHIELD} cards - including yours!"
+){
+    override fun special_effect(caster:Player, board:Board){
+        for(player in board.players){
+            if(player.is_dead()){
+                continue
+            }
+            var has_shield = false
+            for(card in player.board){
+                if(card.shield_max > 0){
+                    card.destroy(player, caster)
+                    has_shield = true
+                }
+            }
+            if(!has_shield){
+                if(player != caster){
+                    player.on_damaged(2, caster)
+                }
+            }
+        }
+    }
+}
+
+class Fashion_police(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Fashion Police",
+    occur=2,
+    shield_max=3,
+)
+
+class Tyrany_of_beauty(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Tyrany of Beauty",
+    occur=1,
+    dmg=1,
+    heal=1,
+    thunder=1,
+)
+
+class Multitask(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Multitask",
+    occur=2,
+    dmg=2,
+    heal=1,
+)
+
+class Beauty_barrage(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Beauty Barrage",
+    occur=3,
+    dmg=3,
+)
+
+class Mirror_mirror(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Mirror, Mirror",
+    occur=2,
+    shield_max=2,
+)
+
+class Double_trouble(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Double Trouble",
+    occur=2,
+    dmg=2,
+)
+
+class Make_it_work(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Make it Work!",
+    occur=2,
+    heal=2,
+    draw=1,
+)
+
+class Rays_for_days(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Rays for Days",
+    occur=2,
+    thunder=2,
+)
+
+class Laser_show(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Laser Show!",
+    occur=3,
+    dmg=1,
+    thunder=1,
+)
+
+class Me_myself_and_eye(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Me, Myself and Eye",
+    occur=1,
+    heal=1,
+    draw=1,
+)
+
+class Cuter_than_you(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Cuter Than You",
+    occur=1,
+    draw=2,
+)

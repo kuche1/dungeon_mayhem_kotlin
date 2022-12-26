@@ -83,22 +83,24 @@ class Player(
     override fun toString():String{
         return toString(show_private=false)
     }
-    fun toString(show_private:Boolean=false):String{
+    fun toString(show_private:Boolean=false, short:Boolean=false):String{
         var ret = "player `${name}` (${class_})\n"
-        if(is_dead()){
-            ret += "    ${COL_HEAL}dead${COL_RESET}\n"
-        }else{
-            ret += "    ${COL_HEAL}hp:${hp}${COL_RESET}, ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}\n"
-            if(board.size > 0){
-                ret += "    board:\n"
-                for(card in board){
-                ret += "        ${card}\n"
-                }
-            }
-            if(show_private){
-                ret += "    hand:\n"
-                for(card in hand){
+        if(!short){
+            if(is_dead()){
+                ret += "    ${COL_HEAL}dead${COL_RESET}\n"
+            }else{
+                ret += "    ${COL_HEAL}hp:${hp}${COL_RESET}, ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}\n"
+                if(board.size > 0){
+                    ret += "    board:\n"
+                    for(card in board){
                     ret += "        ${card}\n"
+                    }
+                }
+                if(show_private){
+                    ret += "    hand:\n"
+                    for(card in hand){
+                        ret += "        ${card}\n"
+                    }
                 }
             }
         }
@@ -269,7 +271,10 @@ class Player(
     }
 
     fun play_turn(board:Board){
+        board.on_player_turn(this)
+
         if(is_dead()){
+            // TODO deal 1 dmg to someone
             return
         }
 
