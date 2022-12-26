@@ -89,7 +89,7 @@ class Player(
             if(is_dead()){
                 ret += "    ${COL_HEAL}dead${COL_RESET}\n"
             }else{
-                ret += "    ${COL_HEAL}hp:${hp}${COL_RESET}, ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}\n"
+                ret += "    ${COL_HEAL}hp:${hp}${COL_RESET}, ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}, deck:${deck.size}, discard:${discard.size}\n"
                 if(board.size > 0){
                     ret += "    board:\n"
                     for(card in board){
@@ -211,8 +211,10 @@ class Player(
         hand = mutableListOf()
         // board
         board = mutableListOf()
-        // deck and discard
-        clean_discard_and_generate_new_deck()
+        // generate deck
+        deck = class_.generate_deck(this).toMutableList().shuffled().toMutableList()
+        // discard
+        discard = mutableListOf()
         // draw
         draw()
         draw()
@@ -226,28 +228,16 @@ class Player(
         }.start()
     }
 
-    fun clean_discard_and_generate_new_deck(){
-        // it's not possible for any of your cards to go to the enemy's discard, just saying
-        
-        // generate new deck
-        deck = class_.generate_deck(this).toMutableList().shuffled().toMutableList()
-        // make sure we don't generate the cards from hand into the new deck
-        for(card_hand in hand){
-            for(card_deck in deck){
-                if(card_hand.name == card_deck.name){
-                    val idx = deck.indexOf(card_deck)
-                    deck.removeAt(idx)
-                    break
-                }
-            }
-        }
-
+    private fun shuffle_discard_into_deck(){
+        // shuffle discard and put into deck
+        deck = discard
         discard = mutableListOf()
+        deck = deck.shuffled().toMutableList()
     }
 
     fun draw(){
         if(deck.size == 0){
-            clean_discard_and_generate_new_deck()
+            shuffle_discard_into_deck()
         }
 
         // TODO not sure if this is fast or slow

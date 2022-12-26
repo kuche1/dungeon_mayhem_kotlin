@@ -36,7 +36,7 @@ open class Card(
         if(align_left){
             ret += "-"
         }
-        ret += "23s" // TODO do something about this fucking retarded shit, hardcoding this is cancer
+        ret += "25s" // TODO do something about this fucking retarded shit, hardcoding this is cancer
         ret = ret.format(name)
 
         ret += " <"
@@ -587,4 +587,175 @@ class Cuter_than_you(
     name="Cuter Than You",
     occur=1,
     draw=2,
+)
+
+/////////////////////////////////////////////////////////////////////////////// dr tentaculous
+
+class Mind_games(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Mind Games",
+    occur=3,
+    desc="Swap your hand with an opponent's hand."
+){
+    override fun special_effect(caster:Player, board:Board){
+        val opponent = board.choose_opponent(caster)
+        if(opponent == null){
+            return
+        }
+        val op_hand = opponent.hand
+        opponent.hand = caster.hand
+        caster.hand = op_hand
+    }
+}
+
+class Tell_me_about_your_mother(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Tell Me About Your Mother",
+    occur=2,
+    desc="Add the top card of each opponent's discard pile to your hand."
+){
+    override fun special_effect(caster:Player, board:Board){
+        for(player in board.players){
+            if(player.is_dead()){
+                continue
+            }
+            if(player.discard.size == 0){
+                continue
+            }
+            val last_card = player.discard.last()
+            player.discard.remove(last_card)
+            caster.hand += last_card
+        }
+    }
+}
+
+class Mind_blast(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Mind Blast",
+    occur=2,
+    desc="${ICON_DMG} an opponent once for each card they have in their hand (max of 5 damage)."
+){
+    override fun special_effect(caster:Player, board:Board){
+        val opponent = board.choose_opponent(caster)
+        if(opponent == null){
+            return
+        }
+        var dmg = opponent.hand.size
+        if(dmg > 5){
+            dmg = 5
+        }
+        opponent.on_damaged(dmg, caster)
+    }
+}
+
+class Diagnosis_evil(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Diagnosis: Evil!",
+    occur=3,
+    draw=1,
+    dmg=2,
+)
+
+class Sip_tea(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Sip Tea",
+    occur=2,
+    heal=2,
+    draw=1,
+)
+
+class Receptionist(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Receptionist",
+    occur=1,
+    shield_max=1,
+    dmg=1,
+)
+
+class Phd_in_psychology(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="PhD in Psychology",
+    occur=2,
+    thunder=2,
+)
+
+class Id_insinuation(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Id Insinuation",
+    occur=3,
+    dmg=1,
+    thunder=1,
+)
+
+class Just_a_nibble(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Just a Nibble",
+    occur=1,
+    draw=1,
+    heal=1,
+    thunder=1,
+)
+
+class Superego_whip(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Superego Whip",
+    occur=3,
+    dmg=3,
+)
+
+class Puppet_therapy(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Puppet Therapy",
+    occur=3,
+    shield_max=1,
+    dmg=2,
+)
+
+class Eego_whip(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Eego Whip",
+    occur=1,
+    dmg=2,
+)
+
+class Enthralled_thrall(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Enthralled_thrall",
+    occur=2,
+    shield_max=2,
+)
+
+class Relax_after_work(
+    original_owner:Player,
+):Card(
+    original_owner,
+    name="Relax After Work",
+    occur=1,
+    draw=3,
 )

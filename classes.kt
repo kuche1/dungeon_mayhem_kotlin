@@ -124,13 +124,29 @@ class Class_deliah:Class(
     }
 }
 
-class Class_dr_tentaculous(
-    name:String = "Dr. Tentaculous (unplayable)",
-    color:String = COL_BLACK_BRIGHT, // should have been brown
-):Class(
-    name,
-    color,
-)
+class Class_dr_tentaculous:Class(
+    name = "Dr. Tentaculous",
+    color = COL_BLACK_BRIGHT, // should have been brown
+){
+    override fun generate_deck_uncked(p:Player):Array<Card>{
+        return arrayOf(
+            Mind_games(p), Mind_games(p), Mind_games(p),
+            Tell_me_about_your_mother(p), Tell_me_about_your_mother(p),
+            Mind_blast(p), Mind_blast(p),
+            Diagnosis_evil(p), Diagnosis_evil(p), Diagnosis_evil(p),
+            Sip_tea(p), Sip_tea(p),
+            Receptionist(p),
+            Phd_in_psychology(p), Phd_in_psychology(p),
+            Id_insinuation(p), Id_insinuation(p), Id_insinuation(p),
+            Just_a_nibble(p),
+            Superego_whip(p), Superego_whip(p), Superego_whip(p),
+            Puppet_therapy(p), Puppet_therapy(p), Puppet_therapy(p),
+            Eego_whip(p),
+            Enthralled_thrall(p), Enthralled_thrall(p),
+            Relax_after_work(p),
+        )
+    }
+}
 
 class Class_hoots_mcgoots(
     name:String = "Hoots McGoots (unplayable)",
