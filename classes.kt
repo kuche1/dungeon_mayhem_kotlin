@@ -148,52 +148,34 @@ class Class_dr_tentaculous:Class(
     }
 }
 
-class Class_hoots_mcgoots(
-    name:String = "Hoots McGoots (unplayable)",
-    color:String = COL_YELLOW_DARK,
-):Class(
-    name,
-    color,
+class Class_hoots_mcgoots:Class(
+    name = "Hoots McGoots (unplayable)",
+    color = COL_YELLOW_DARK,
 )
 
-class Class_lia(
-    name:String = "Lia (unplayable)",
-    color:String = COL_RED_DARK,
-):Class(
-    name,
-    color,
+class Class_lia:Class(
+    name = "Lia (unplayable)",
+    color = COL_RED_DARK,
 )
 
-class Class_lord_cinderpuff(
-    name:String = "Lord Cinderpuff (unplayable)",
-    color:String = COL_CYAN_DARK,
-):Class(
-    name,
-    color,
+class Class_lord_cinderpuff:Class(
+    name = "Lord Cinderpuff (unplayable)",
+    color = COL_CYAN_DARK,
 )
 
-class Class_mimi_lechaise(
-    name:String = "Mimi LeChaise (unplayable)",
-    color:String = COL_GREEN_DARK,
-):Class(
-    name,
-    color,
+class Class_mimi_lechaise:Class(
+    name = "Mimi LeChaise (unplayable)",
+    color = COL_GREEN_DARK,
 )
 
-class Class_oriax(
-    name:String = "Oriax (unplayable)",
-    color:String = COL_MAGENTA_DARK,
-):Class(
-    name,
-    color,
+class Class_oriax:Class(
+    name = "Oriax (unplayable)",
+    color = COL_MAGENTA_DARK,
 )
 
-class Class_sutha(
-    name:String = "Sutha (unplayable)",
-    color:String = COL_GREEN_BRIGHT,
-):Class(
-    name,
-    color,
+class Class_sutha:Class(
+    name = "Sutha (unplayable)",
+    color = COL_GREEN_BRIGHT,
 )
 
 val ALL_CLASSES = arrayOf(
@@ -208,5 +190,3 @@ val ALL_CLASSES = arrayOf(
     Class_oriax(),
     Class_sutha(),
 )
-
-// Class_azzan(), Class_blorp(), Class_deliah(), Class_lord_cinderpuff(), Class_mimi_lechaise(), Class_oriax(), Class_sutha())
