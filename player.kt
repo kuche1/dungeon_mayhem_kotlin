@@ -36,10 +36,7 @@ class Player(
     // read and write
 
     fun readln():String{
-        val red = input.readLine()
-        // println("the last character is `${red.last()}`")
-        // require(red.last() == '\n'){"unreachable"}
-        // return red.dropLast(1)
+        val red = input.readLine() // TODO this is null if the bitch has disconnected
         return red
     }
     fun write(text:String){
@@ -55,27 +52,20 @@ class Player(
         output.flush()
     }
 
+    fun write_sep(char:String="~"){
+        require(char.length == 1){"not implemented"}
+        val repeat = 100
+        val sep = char.repeat(repeat)
+        writeln(sep)
+    }
+
     fun write_t1(text:String){
-        // TODO make it so that colored text is not fucked
-
+        write_sep("~")
         val lines = text.split("\n")
-        var longest = 0
         for(line in lines){
-            if(line.length > longest){
-                longest = line.length
-            }
+            writeln("~~~ ${line}")
         }
-
-        val len = longest
-        val ch = "~"
-        val sep = ch.repeat(len + 8)
-    
-        writeln(sep)
-        for(line in lines){
-            writeln("${ch} ${line}")
-            // writeln("%s %${len}s %s".format(ch, text, ch))
-        }
-        writeln(sep)
+        write_sep("~")
     }
 
     // print
@@ -84,7 +74,11 @@ class Player(
         return toString(show_private=false)
     }
     fun toString(show_private:Boolean=false, short:Boolean=false):String{
-        var ret = "player `${name}` (${class_})\n"
+        var ret = "player `${name}` (${class_})"
+        if(show_private){
+            ret += " (you)"
+        }
+        ret += "\n"
         if(!short){
             if(is_dead()){
                 ret += "    ${COL_HEAL}dead${COL_RESET}\n"

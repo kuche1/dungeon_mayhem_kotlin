@@ -66,8 +66,10 @@ open class Card(
     }
 
     fun summon(player:Player, board:Board){
-        // announce // TODO
-        // board.writeln_except(player, "${}")
+        // announce
+        board.writeln("${player.toString(short=true)}")
+        board.writeln("has played")
+        board.writeln("${this}")
 
         // remove from hand
         player.hand.remove(this)

@@ -30,10 +30,9 @@ class Board(){
     }
 
     fun write_sep(){
-        val times = 80
-        writeln("=".repeat(times))
-        writeln("-".repeat(times))
-        writeln("~".repeat(times))
+        for(player in players){
+            player.write_sep()
+        }
     }
 
     fun write_board_state(){
