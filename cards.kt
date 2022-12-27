@@ -91,19 +91,18 @@ open class Card(
     }
 
     fun destroy(current_owner:Player, destroyer:Player){
-        val belongs_to_board = current_owner.board
-        belongs_to_board.remove(this)
+        // remove from board
+        current_owner.board.remove(this)
+        // activate on_destroy effect
         on_destroy_special_effect(destroyer, current_owner)
-        on_discard()
+        // restore the internal state in case anyone needs to take the card out of the discard pile
+        shield = shield_max
+        // add to discard pile
         original_owner.discard += this
     }
 
     open fun on_destroy_special_effect(destroyer:Player, current_card_owner:Player){
         // do nothing by default
-    }
-
-    private fun on_discard(){
-        shield = shield_max
     }
 
     open fun special_effect(caster:Player, board:Board){

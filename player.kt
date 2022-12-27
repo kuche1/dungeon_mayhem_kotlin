@@ -23,8 +23,8 @@ class Player(
     var hand:MutableList<Card> = mutableListOf()
     var board:MutableList<Card> = mutableListOf()
     var discard:MutableList<Card> = mutableListOf()
-    var hp:Int = 10
-    var thunder:Int = 1
+    var hp:Int = 0
+    var thunder:Int = 0
     var shield_penetration_until_end_of_turn:Boolean = false
 
     init{
