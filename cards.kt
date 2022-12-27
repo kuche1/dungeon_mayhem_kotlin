@@ -7,10 +7,6 @@ import colors.*
 import player.Player
 import board.Board
 
-const val ICON_SHIELD:String = "${COL_SHIELD}shield${COL_RESET}"
-const val ICON_HEAL:String = "${COL_HEAL}heal${COL_RESET}"
-const val ICON_DMG:String = "${COL_DMG}dmg${COL_RESET}"
-
 open class Card(
     val original_owner:Player,
     val name:String = "unnamed",
@@ -454,6 +450,7 @@ class Charm_ray(
             return
         }
         board.set_dmg_cards_target_until_players_next_turn(target, caster)
+        // TODO make it so that the card stays on the board
     }
 }
 

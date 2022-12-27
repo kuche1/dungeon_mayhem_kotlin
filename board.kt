@@ -4,6 +4,7 @@ package board
 import classes.ALL_CLASSES
 import player.Player
 import cards.Card
+import colors.*
 
 class Board(){
     val all_classes = ALL_CLASSES
@@ -37,6 +38,11 @@ class Board(){
 
     fun write_board_state(){
         write_sep()
+
+        if(dmg_cards_target != null){
+            writeln("${ICON_DMG} cards target: ${dmg_cards_target!!.toString(short=true)}")
+            writeln()
+        }
 
         for(player in players){
             for(player_draw in players){

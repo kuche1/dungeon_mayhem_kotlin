@@ -25,3 +25,8 @@ const val COL_SHIELD = COL_YELLOW_DARK
 const val COL_HEAL = COL_RED_BRIGHT
 const val COL_DRAW = COL_GREEN_DARK
 const val COL_THUNDER = COL_YELLOW_BRIGHT
+
+// icons
+const val ICON_SHIELD:String = "${COL_SHIELD}shield${COL_RESET}"
+const val ICON_HEAL:String = "${COL_HEAL}heal${COL_RESET}"
+const val ICON_DMG:String = "${COL_DMG}dmg${COL_RESET}"
