@@ -219,6 +219,8 @@ class Player(
         ready = true
     }
 
+    // TODO `say` method here
+
     // game stuff
 
     fun on_damaged(damage:Int, damager:Player){ // TODO rename to `damage` or `get_damage` or smt

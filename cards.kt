@@ -756,3 +756,13 @@ class Relax_after_work(
     occur=1,
     draw=3,
 )
+
+/////////////////////////////////////////////////////////////////////////////// hoots mcgoots
+
+// class Send_in_the_clowns(original_owner:Player):Card(original_owner,
+//     name="Send in the Clowns",
+//     occur=1,
+//     shield_max=1,
+//     thunder=1,
+// )
+
