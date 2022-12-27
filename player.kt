@@ -265,7 +265,7 @@ class Player(
     fun play_turn(board:Board){
         board.on_player_turn(this)
 
-        if(!ready){
+        if(!ready){ // TODO we also need a way to disconect newly connected players (or do we?)
             return
         }
         if(is_dead()){
