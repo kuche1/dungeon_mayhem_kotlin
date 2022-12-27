@@ -16,8 +16,11 @@ class Player(
     var name:String = "unnamed",
     var ready:Boolean = false,
 ){
+    // IO
     val input:BufferedReader
     val output:PrintWriter
+    // var disconnected:Boolean = false
+    // game stuff
     var class_:Class = Class()
     var deck:MutableList<Card> = mutableListOf()
     var hand:MutableList<Card> = mutableListOf()
@@ -75,6 +78,11 @@ class Player(
     }
     fun toString(show_private:Boolean=false, short:Boolean=false):String{
         var ret = "player `${name}` (${class_})"
+        // if(disconnected){
+        //     ret += " (disconnected)"
+        // }else if(!ready){
+        //     ret += " (in class selection)"
+        // }
         if(show_private){
             ret += " (you)"
         }
@@ -257,11 +265,13 @@ class Player(
     fun play_turn(board:Board){
         board.on_player_turn(this)
 
+        if(!ready){
+            return
+        }
         if(is_dead()){
             // TODO deal 1 dmg to someone
             return
         }
-
         draw()
         thunder = 1
 
