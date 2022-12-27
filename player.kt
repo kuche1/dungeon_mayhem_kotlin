@@ -19,7 +19,7 @@ class Player(
     // IO
     val input:BufferedReader
     val output:PrintWriter
-    // var disconnected:Boolean = false
+    var disconnected:Boolean = false
     // game stuff
     var class_:Class = Class()
     var deck:MutableList<Card> = mutableListOf()
@@ -38,8 +38,13 @@ class Player(
 
     // read and write
 
-    fun readln():String{
-        val red = input.readLine() // TODO this is null if the bitch has disconnected
+    fun readln():String?{ // result is `null` if player has disconnected
+        val red = input.readLine()
+        if(red == null){
+            hp = 0
+            ready = false
+            disconnected = true
+        }
         return red
     }
     fun write(text:String){
@@ -88,10 +93,21 @@ class Player(
         }
         ret += "\n"
         if(!short){
-            if(is_dead()){
-                ret += "    ${COL_HEAL}dead${COL_RESET}\n"
+            ret += "    ${COL_HEAL}"
+            if(disconnected){
+                ret += "disconnected"
+            }else if(!ready){
+                ret += "not ready"
+            }else if(is_dead()){
+                ret += "dead"
             }else{
-                ret += "    ${COL_HEAL}hp:${hp}${COL_RESET}, ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}, deck:${deck.size}, discard:${discard.size}\n"
+                // is alive and well
+                ret += "hp:${hp}"
+            }
+            ret += COL_RESET
+
+            if(is_alive()){
+                ret += ", ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}, deck:${deck.size}, discard:${discard.size}\n"
                 if(field.size > 0){
                     ret += "    field:\n"
                     for(card in field){
@@ -104,6 +120,8 @@ class Player(
                         ret += "        ${card}\n"
                     }
                 }
+            }else{
+                ret += "\n"
             }
         }
         return ret.dropLast(1)
@@ -134,7 +152,11 @@ class Player(
         while(true){
             write("> ")
             write_flush()
+
             val choice_str = readln()
+            if(choice_str == null){
+                return null
+            }
             
             try{
                 choice_int = choice_str.toInt()

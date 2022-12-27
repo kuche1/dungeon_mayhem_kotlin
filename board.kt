@@ -8,7 +8,7 @@ import colors.*
 
 class Board(){
     val all_classes = ALL_CLASSES
-    var players:Array<Player> = arrayOf()
+    var players:MutableList<Player> = mutableListOf()
     var dmg_cards_target:Player? = null
     var dmg_cards_target_until_players_next_turn:Player? = null
 
@@ -59,12 +59,37 @@ class Board(){
 
     // on event
 
+    private fun kick_disconnected_players(){
+        var idx = 0
+        while(idx < players.size){
+            val player = players[idx]
+            if(player.disconnected){
+                players.remove(player)
+            }else{
+                idx += 1
+            }
+        }
+    }
+
     fun on_game_start(){
+        // kick the disconnected ppl
+        kick_disconnected_players()
+
+        // reset state
         dmg_cards_target = null
         dmg_cards_target_until_players_next_turn = null
 
+        // call on_event for players
         for(player in players){
             player.on_game_start()
+        }
+    }
+
+    fun on_game_end(){
+        kick_disconnected_players()
+        // call on_event for players
+        for(player in players){
+            player.on_game_end(this)
         }
     }
 
@@ -173,6 +198,8 @@ class Board(){
             // wait for everyone to ready up
             while(true){
                 Thread.sleep(1_000)
+                kick_disconnected_players()
+
                 var ready = 0
                 var unready = 0
                 for(player in players){
@@ -223,9 +250,7 @@ class Board(){
             }
 
             // game end
-            for(player in players){
-                player.on_game_end(this)
-            }
+            on_game_end()
         }
     }
 }
