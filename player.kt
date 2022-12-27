@@ -21,7 +21,7 @@ class Player(
     var class_:Class = Class()
     var deck:MutableList<Card> = mutableListOf()
     var hand:MutableList<Card> = mutableListOf()
-    var board:MutableList<Card> = mutableListOf()
+    var field:MutableList<Card> = mutableListOf()
     var discard:MutableList<Card> = mutableListOf()
     var hp:Int = 0
     var thunder:Int = 0
@@ -84,9 +84,9 @@ class Player(
                 ret += "    ${COL_HEAL}dead${COL_RESET}\n"
             }else{
                 ret += "    ${COL_HEAL}hp:${hp}${COL_RESET}, ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}, deck:${deck.size}, discard:${discard.size}\n"
-                if(board.size > 0){
-                    ret += "    board:\n"
-                    for(card in board){
+                if(field.size > 0){
+                    ret += "    field:\n"
+                    for(card in field){
                     ret += "        ${card}\n"
                     }
                 }
@@ -180,7 +180,7 @@ class Player(
 
     fun on_damaged(damage:Int, damager:Player){ // TODO rename to `damage` or `get_damage` or smt
         if(!damager.shield_penetration_until_end_of_turn){
-            for(card in board){
+            for(card in field){
                 if(card.shield > 0){
                     card.shield -= damage
                     if(card.shield <= 0){
@@ -203,9 +203,9 @@ class Player(
         hp = 10
         // hand
         hand = mutableListOf()
-        // board
-        board = mutableListOf()
-        // generate deck
+        // field
+        field = mutableListOf()
+        // generate deck // TODO instead of doing that, generate the deck on player creation and just call the shuffle_discard function
         deck = class_.generate_deck(this).toMutableList().shuffled().toMutableList()
         // discard
         discard = mutableListOf()

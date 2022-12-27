@@ -95,7 +95,7 @@ class Board(){
             if(player.is_dead()){
                 continue
             }
-            for(card in player.board){
+            for(card in player.field){
                 if(card.shield_max > 0){
                     targets += card
                 }
@@ -111,7 +111,7 @@ class Board(){
             if(player.is_dead() || player == caster){
                 continue
             }
-            for(card in player.board){
+            for(card in player.field){
                 if(card.shield > 0){
                     targets += card
                 }
@@ -132,7 +132,7 @@ class Board(){
         var found = 0
         var owner:Player? = null
         for(player in players){
-            for(card in player.board){
+            for(card in player.field){
                 if(card == card_to_find){
                     found += 1
                     owner = player

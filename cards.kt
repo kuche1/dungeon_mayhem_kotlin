@@ -81,8 +81,8 @@ open class Card(
             board.damage_player(player, dmg)
         }
 
-        // add to board
-        player.board += this
+        // add to field
+        player.field += this
 
         // and remove from board if no shield
         if(shield <= 0){
@@ -91,8 +91,8 @@ open class Card(
     }
 
     fun destroy(current_owner:Player, destroyer:Player){
-        // remove from board
-        current_owner.board.remove(this)
+        // remove from field
+        current_owner.field.remove(this)
         // activate on_destroy effect
         on_destroy_special_effect(destroyer, current_owner)
         // restore the internal state in case anyone needs to take the card out of the discard pile
@@ -144,9 +144,8 @@ class Charm(
             return
         }
         val card_owner = board.find_card_owner(choosen_card)
-        val belongs_to_board = card_owner.board
-        belongs_to_board.remove(choosen_card)
-        caster.board += choosen_card
+        card_owner.field.remove(choosen_card)
+        caster.field += choosen_card
     }
 }
 
@@ -467,7 +466,7 @@ class Death_ray(
                 continue
             }
             var has_shield = false
-            for(card in player.board){
+            for(card in player.field){
                 if(card.shield_max > 0){
                     card.destroy(player, caster)
                     has_shield = true
