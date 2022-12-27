@@ -32,7 +32,9 @@ class Board(){
 
     fun write_sep(){
         for(player in players){
-            player.write_sep()
+            if(player.ready){
+                player.write_sep()
+            }
         }
     }
 
@@ -40,8 +42,8 @@ class Board(){
         write_sep()
 
         if(dmg_cards_target != null){
-            writeln("${ICON_DMG} cards target: ${dmg_cards_target!!.toString(short=true)}")
             writeln()
+            writeln("!!! all ${ICON_DMG} cards target: ${dmg_cards_target!!.toString(short=true)} !!!")
         }
 
         for(player in players){
@@ -54,7 +56,6 @@ class Board(){
             player.writeln()
             player.writeln(player.toString(show_private=true))
         }
-        writeln()
     }
 
     // on event
@@ -170,7 +171,22 @@ class Board(){
 
     fun damage_player(caster:Player, damage:Int){
         var targets:Array<Player> = arrayOf()
-        
+
+        if(caster.attacks_hit_all_opponents_until_next_turn){
+            for(player in players){
+                if(player.is_dead()){
+                    continue
+                }
+                if(player == caster && dmg_cards_target != caster){
+                    // the guy's attacks are AOE to everyone but himself, and if he has been selected
+                    // as the target of all DMG cards, then everyone AND him get damaged
+                    continue
+                }
+                player.on_damaged(damage, caster)
+            }
+            return
+        }
+
         if(dmg_cards_target == null){
             for(player in players){ // TODO we're kinda duplicating code here...
                 if(player.is_dead()){
@@ -195,11 +211,12 @@ class Board(){
 
     fun main_loop(){
         while(true){
+            println("new game")
             // wait for everyone to ready up
             while(true){
                 Thread.sleep(1_000)
-                kick_disconnected_players()
 
+                kick_disconnected_players()
                 var ready = 0
                 var unready = 0
                 for(player in players){
@@ -225,12 +242,16 @@ class Board(){
 
             // game loop
             game_loop@ while(true){
-                for(player in players){
+                var idx_player = 0
+                while(idx_player < players.size){
+                // for(player in players){
+                    val player = players[idx_player]
+
                     player.play_turn(this)
 
                     var players_alive = 0
-                    for(player in players){
-                        if(player.is_alive()){
+                    for(p in players){
+                        if(p.is_alive()){
                             players_alive += 1
                         }
                     }
@@ -239,13 +260,15 @@ class Board(){
                         break@game_loop
                     }
                     if(players_alive == 1){
-                        for(player in players){
-                            if(player.is_alive()){
-                                write_t1("winner: ${player}")
+                        for(p in players){
+                            if(p.is_alive()){
+                                write_t1("winner: ${p}")
                                 break@game_loop
                             }
                         }
                     }
+
+                    idx_player += 1
                 }
             }
 

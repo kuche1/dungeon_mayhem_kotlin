@@ -8,8 +8,8 @@ import player.Player
 // base class
 
 open class Class(
-    val name:String = "unnamed",
-    val color:String = COL_ERROR,
+    val name:String = "class not picked",
+    val color:String = COL_WHITE_DARK,
 ){
     override fun toString():String{
         return "${color}${name}${COL_RESET}"
@@ -148,9 +148,28 @@ class Class_dr_tentaculous:Class(
 }
 
 class Class_hoots_mcgoots:Class(
-    name = "Hoots McGoots (unplayable)",
+    name = "Hoots McGoots",
     color = COL_YELLOW_DARK,
-)
+){
+    override fun generate_deck_uncked(p:Player):Array<Card>{
+        return arrayOf(
+            To_the_face(p), To_the_face(p),
+            Owlbear_boogie(p), Owlbear_boogie(p),
+            For_my_next_trick(p), For_my_next_trick(p),
+            Send_in_the_clowns(p), Send_in_the_clowns(p), Send_in_the_clowns(p),
+            The_hoots_fan_club(p), The_hoots_fan_club(p),
+            Grand_finale(p), Grand_finale(p),
+            Look_out_below(p), Look_out_below(p),
+            Very_very_fast(p), Very_very_fast(p), Very_very_fast(p), Very_very_fast(p),
+            Wise_as_an_owl(p),
+            Talk_to_my_agent(p), Talk_to_my_agent(p),
+            Made_you_look(p),
+            Strong_as_a_bear(p), Strong_as_a_bear(p),
+            Crushing_hug(p), Crushing_hug(p),
+            Intermission(p),
+        )
+    }
+}
 
 class Class_lia:Class(
     name = "Lia (unplayable)",

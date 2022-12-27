@@ -63,6 +63,7 @@ open class Card(
 
     fun summon(player:Player, board:Board){
         // announce
+        board.writeln()
         board.writeln("${player.toString(short=true)}")
         board.writeln("has played")
         board.writeln("${this}")
@@ -424,9 +425,10 @@ class Praise_me(
             }
             // TODO this is retarded and needs to be multithreaded
             // TODO add a little flavour
-            val choice = player.choice("praise ${caster.toString(short=true)}?", arrayOf("yes", "no"))
+            val choice = player.choice("praise ${caster.toString(short=true)}? (take ${ICON_DMG} ${ICON_DMG} if you refuse)", arrayOf("yes", "no"))
             if(choice == "yes"){
-                board.writeln("${player.toString(short=true)} to ${caster.toString(short=true)}: I love the taste of your semen")
+                // board.writeln("${player.toString(short=true)} to ${caster.toString(short=true)}: I love the taste of your semen")
+                caster.say("I love the taste of ${caster.toString(short=true)}'s semen", board)
             }else{
                 player.on_damaged(2, caster)
             }
@@ -465,16 +467,20 @@ class Death_ray(
             if(player.is_dead()){
                 continue
             }
-            var has_shield = false
+
+            var to_destroy:Array<Card> = arrayOf()
             for(card in player.field){
                 if(card.shield_max > 0){
-                    card.destroy(player, caster)
-                    has_shield = true
+                    to_destroy += card
                 }
             }
-            if(!has_shield){
+            if(to_destroy.size == 0){
                 if(player != caster){
                     player.on_damaged(2, caster)
+                }
+            }else{
+                for(card in to_destroy){
+                    card.destroy(player, caster)
                 }
             }
         }
@@ -759,10 +765,122 @@ class Relax_after_work(
 
 /////////////////////////////////////////////////////////////////////////////// hoots mcgoots
 
-// class Send_in_the_clowns(original_owner:Player):Card(original_owner,
-//     name="Send in the Clowns",
-//     occur=1,
-//     shield_max=1,
-//     thunder=1,
-// )
+class To_the_face(original_owner:Player,):Card(original_owner,
+    name="To the Face!",
+    occur=2,
+    desc="Destroy a ${ICON_SHIELD} card and then ${ICON_DMG} for each starting ${ICON_SHIELD} on that card.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        val card = board.choose_shield_card(caster)
+        if(card == null){
+            return
+        }
+        card.destroy(board.find_card_owner(card), caster) // TODO what if u die here, do u still do dmg? the solution could be adding a check in the `damage_player` fnc
+        board.damage_player(caster, card.shield_max)
+    }
+}
 
+class Owlbear_boogie(original_owner:Player,):Card(original_owner,
+    name="Owlbear_boogie",
+    occur=2,
+    desc="Each player may do a little dance and then ${ICON_DRAW}. You ${ICON_DRAW} for each player who danced.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        for(player in board.players){ // TODO this is retarded and needs to be multithreaded
+            if(player.is_dead()){ // if can also decide to draw for yourself
+                continue
+            }
+            val choice = player.choice("do a little dance and ${ICON_DRAW}?", arrayOf("yes", "no"))
+            if(choice == "yes"){
+                // TODO add multiple dances?
+                player.say("brrr shtibidi top top top top top yes yes yes yes shtip shtibididip shtibidi w w w w yes yes yes yes", board)
+                player.draw()
+                caster.draw()
+            }
+        }
+    }
+}
+
+class For_my_next_trick(original_owner:Player,):Card(original_owner,
+    name="For My Next Trick...",
+    occur=2,
+    dmg=1,
+    thunder=1,
+    desc="Until your next turn, your attacks hit all opponents.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        caster.attacks_hit_all_opponents_until_next_turn = true
+    }
+}
+
+class Send_in_the_clowns(original_owner:Player):Card(original_owner,
+    name="Send in the Clowns",
+    occur=3,
+    shield_max=1,
+    thunder=1,
+)
+
+class The_hoots_fan_club(original_owner:Player):Card(original_owner,
+    name="The Hoots Fan Club",
+    occur=2,
+    shield_max=2,
+    heal=1,
+)
+
+class Grand_finale(original_owner:Player):Card(original_owner,
+    name="Grand Finale",
+    occur=2,
+    dmg=3,
+)
+
+class Look_out_below(original_owner:Player):Card(original_owner,
+    name="Look Out Below!",
+    occur=2,
+    dmg=2,
+)
+
+class Very_very_fast(original_owner:Player):Card(original_owner,
+    name="Very Very Fast",
+    occur=4,
+    dmg=1,
+    thunder=1,
+)
+
+class Wise_as_an_owl(original_owner:Player):Card(original_owner,
+    name="Wise as an Owl",
+    occur=1,
+    draw=3,
+)
+
+class Talk_to_my_agent(original_owner:Player):Card(original_owner,
+    name="Talk to My Agent",
+    occur=2,
+    shield_max=3,
+)
+
+class Made_you_look(original_owner:Player):Card(original_owner,
+    name="Made you look",
+    occur=1,
+    draw=2,
+    thunder=1,
+)
+
+class Strong_as_a_bear(original_owner:Player):Card(original_owner,
+    name="Strong as a Bear",
+    occur=2,
+    dmg=2,
+    heal=1,
+)
+
+class Crushing_hug(original_owner:Player):Card(original_owner,
+    name="Crushing Hug",
+    occur=2,
+    dmg=2,
+    heal=2,
+)
+
+class Intermission(original_owner:Player):Card(original_owner,
+    name="Intermission",
+    occur=1,
+    draw=2,
+)

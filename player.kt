@@ -28,12 +28,67 @@ class Player(
     var discard:MutableList<Card> = mutableListOf()
     var hp:Int = 0
     var thunder:Int = 0
+    // card effects
     var shield_penetration_until_end_of_turn:Boolean = false
+    var attacks_hit_all_opponents_until_next_turn:Boolean = false
 
     init{
         input = BufferedReader(InputStreamReader(sock.inputStream))
         // output = PrintWriter(sock.getOutputStream(), true) // flush on every new line
         output = PrintWriter(sock.getOutputStream()) // don't flush
+    }
+
+    // toString
+
+    override fun toString():String{
+        return toString(show_private=false)
+    }
+    fun toString(show_private:Boolean=false, short:Boolean=false):String{
+        var ret = "player `${name}` (${class_})"
+        if(show_private){
+            ret += " (you)"
+        }
+        ret += "\n"
+
+        if(!short){
+            ret += "    ${COL_HEAL}"
+            if(disconnected){
+                ret += "disconnected"
+            }else if(!ready){
+                ret += "not ready"
+            }else if(is_dead()){
+                ret += "dead"
+            }else{
+                // is alive and well
+                ret += "hp:${hp}"
+            }
+            ret += COL_RESET
+
+            if(is_alive()){
+                ret += ", ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}, deck:${deck.size}, discard:${discard.size}\n"
+                if(shield_penetration_until_end_of_turn){
+                    ret += "    attacks penetrate shield until end of turn\n"
+                }
+                if(attacks_hit_all_opponents_until_next_turn){
+                    ret += "    attacks hit all opponents until next turn\n"
+                }
+                if(field.size > 0){
+                    ret += "    field:\n"
+                    for(card in field){
+                    ret += "        ${card}\n"
+                    }
+                }
+                if(show_private){
+                    ret += "    hand:\n"
+                    for(card in hand){
+                        ret += "        ${card}\n"
+                    }
+                }
+            }else{
+                ret += "\n"
+            }
+        }
+        return ret.dropLast(1)
     }
 
     // read and write
@@ -65,7 +120,7 @@ class Player(
 
     fun write_sep(char:String="~"){
         require(char.length == 1){"not implemented"}
-        val repeat = 100
+        val repeat = 120
         val sep = char.repeat(repeat)
         writeln(sep)
     }
@@ -79,60 +134,10 @@ class Player(
         write_sep("~")
     }
 
-    // print
-
-    override fun toString():String{
-        return toString(show_private=false)
-    }
-    fun toString(show_private:Boolean=false, short:Boolean=false):String{
-        var ret = "player `${name}` (${class_})"
-        // if(disconnected){
-        //     ret += " (disconnected)"
-        // }else if(!ready){
-        //     ret += " (in class selection)"
-        // }
-        if(show_private){
-            ret += " (you)"
-        }
-        ret += "\n"
-        if(!short){
-            ret += "    ${COL_HEAL}"
-            if(disconnected){
-                ret += "disconnected"
-            }else if(!ready){
-                ret += "not ready"
-            }else if(is_dead()){
-                ret += "dead"
-            }else{
-                // is alive and well
-                ret += "hp:${hp}"
-            }
-            ret += COL_RESET
-
-            if(is_alive()){
-                ret += ", ${COL_THUNDER}thunder:${thunder}${COL_RESET}, ${COL_DRAW}cards:${hand.size}${COL_RESET}, deck:${deck.size}, discard:${discard.size}\n"
-                if(field.size > 0){
-                    ret += "    field:\n"
-                    for(card in field){
-                    ret += "        ${card}\n"
-                    }
-                }
-                if(show_private){
-                    ret += "    hand:\n"
-                    for(card in hand){
-                        ret += "        ${card}\n"
-                    }
-                }
-            }else{
-                ret += "\n"
-            }
-        }
-        return ret.dropLast(1)
-    }
-
     // choice selection
 
     fun <T> choice(info:String, choices:Array<T>):T?{
+        writeln()
         writeln("make a choice: ${info}")
 
         // require(choices.size < 100){"not implemented"}
@@ -187,6 +192,7 @@ class Player(
     // lobby stuff
 
     fun select_name_and_class(board:Board){
+        write_t1("welcome to the cum zone")
         writeln("what's your name?")
         val selected_name = readln()
         if(selected_name == null){
@@ -198,11 +204,11 @@ class Player(
     }
 
     fun select_class(board:Board){
-        write_t1("welcome to the cum zone")
-
         while(true){
-            val selected_or_null:Class? = choice("select class", board.all_classes)
-            val selected = selected_or_null!!
+            val selected:Class? = choice("select class", board.all_classes)
+            if(selected == null){ // the little bitch disconnected in the class selection screen
+                return
+            }
 
             writeln("you selected ${selected}")
             writeln()
@@ -219,7 +225,10 @@ class Player(
         ready = true
     }
 
-    // TODO `say` method here
+    fun say(text:String, board:Board){
+        board.writeln()
+        board.writeln("${toString(short=true)}: ${text}")
+    }
 
     // game stuff
 
@@ -302,6 +311,8 @@ class Player(
     fun play_turn(board:Board){
         board.on_player_turn(this)
 
+        attacks_hit_all_opponents_until_next_turn = false
+
         if(!ready){ // TODO we also need a way to disconect newly connected players (or do we?)
             return
         }
@@ -312,21 +323,20 @@ class Player(
         draw()
         thunder = 1
 
-        // board.write_board_state() // TODO this is fucky
-
         while(thunder > 0){
             board.write_board_state()
             play_a_card_from_hand(board)
             thunder -= 1
-            // board.write_board_state() // TODO or maybe this is fucky instead?
         }
 
         shield_penetration_until_end_of_turn = false
     }
 
     private fun play_a_card_from_hand(board:Board){
-        val card_or_null = choice("select a card to play", hand.toTypedArray())
-        val card = card_or_null!!
+        val card = choice("select a card to play", hand.toTypedArray())
+        if(card == null) { // disconnected
+            return
+        }
 
         card.summon(this, board)
 
