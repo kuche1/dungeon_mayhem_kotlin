@@ -39,6 +39,9 @@ class Player(
     // read and write
 
     fun readln():String?{ // result is `null` if player has disconnected
+        write("> ")
+        write_flush()
+
         val red = input.readLine()
         if(red == null){
             hp = 0
@@ -150,9 +153,8 @@ class Player(
 
         var choice_int:Int
         while(true){
-            write("> ")
-            write_flush()
-
+            // write("> ")
+            // write_flush()
             val choice_str = readln()
             if(choice_str == null){
                 return null
@@ -183,6 +185,17 @@ class Player(
     }
 
     // lobby stuff
+
+    fun select_name_and_class(board:Board){
+        writeln("what's your name?")
+        val selected_name = readln()
+        if(selected_name == null){
+            return
+        }
+        name = selected_name
+
+        select_class(board)
+    }
 
     fun select_class(board:Board){
         write_t1("welcome to the cum zone")

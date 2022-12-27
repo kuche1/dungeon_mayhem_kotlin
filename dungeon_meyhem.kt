@@ -16,7 +16,7 @@ fun accept_new_connections(server:ServerSocket, board:Board){
         val player = Player(sock=sock)
         board.players += player
         Thread{
-            player.select_class(board)
+            player.select_name_and_class(board)
         }.start()
     }
 }
