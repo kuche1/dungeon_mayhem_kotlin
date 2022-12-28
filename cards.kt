@@ -91,13 +91,11 @@ open class Card(
 
         // and remove from board if no shield
         if(shield <= 0){
-            destroy(player, player) // we're getting a bit philosophical here...
+            destroy(player) // we're getting a bit philosophical here...
         }
     }
 
-    fun destroy(current_owner:Player, destroyer:Player){
-        require(owner == current_owner)
-
+    fun destroy(destroyer:Player){
         // remove from field
         owner.remove_card_from_field(this)
         // activate on_destroy effect
@@ -154,7 +152,7 @@ class Charm(
         if(choosen_card == null){ // compiler is smart enough and knows that `choosen_card` can no longer be null after this check
             return
         }
-        val card_owner = board.find_card_owner(choosen_card)
+        val card_owner = choosen_card.owner
         card_owner.remove_card_from_field(choosen_card)
         caster.add_card_to_field(choosen_card)
     }
@@ -279,7 +277,7 @@ class Hugs(
             return
         }
         caster.heal(card.shield_max)
-        card.destroy(board.find_card_owner(card), caster)
+        card.destroy(caster)
     }
 }
 
@@ -485,7 +483,7 @@ class Death_ray(
                 }
             }else{
                 for(card in to_destroy){
-                    card.destroy(player, caster)
+                    card.destroy(caster)
                 }
             }
         }
@@ -780,7 +778,7 @@ class To_the_face(original_owner:Player,):Card(original_owner,
         if(card == null){
             return
         }
-        card.destroy(board.find_card_owner(card), caster) // TODO what if u die here, do u still do dmg? the solution could be adding a check in the `damage_player` fnc
+        card.destroy(caster) // TODO what if u die here, do u still do dmg? the solution could be adding a check in the `damage_player` fnc
         board.damage_player(caster, card.shield_max)
     }
 }
@@ -920,7 +918,7 @@ class Banishing_smite(original_owner:Player,):Card(original_owner,
             }
             val shield_cards = player.get_shield_cards_on_field()
             for(card in shield_cards){
-                card.destroy(board.find_card_owner(card), caster)
+                card.destroy(caster)
             }
         }
     }

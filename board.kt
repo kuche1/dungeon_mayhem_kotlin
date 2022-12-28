@@ -150,19 +150,6 @@ class Board(){
         dmg_cards_target_until_players_next_turn = until_players_next_turn
     }
 
-    fun find_card_owner(card_to_find:Card):Player{ // TODO this needs to stop existing
-        var found = 0
-        var owner:Player? = null
-        for(player in players){
-            if(player.is_this_card_on_your_field(card_to_find)){
-                found += 1
-                owner = player
-            }
-        }
-        require(found == 1){"unreachable"}
-        return owner!!
-    }
-
     fun damage_player(caster:Player, damage:Int){
         var targets:Array<Player> = arrayOf()
 

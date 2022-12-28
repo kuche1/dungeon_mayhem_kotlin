@@ -330,7 +330,7 @@ class Player(
                     card.shield -= damage
                     if(card.shield <= 0){
                         val dmg_left = -card.shield
-                        card.destroy(this, damager)
+                        card.destroy(damager)
                         if(dmg_left > 0){
                             return on_damaged(dmg_left, damager)
                         }
