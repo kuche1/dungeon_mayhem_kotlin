@@ -218,7 +218,6 @@ class Class_lord_cinderpuff:Class(
     }
 }
 
-
 class Class_mimi_lechaise:Class(
     name = "Mimi LeChaise (unplayable)",
     color = COL_GREEN_DARK,
