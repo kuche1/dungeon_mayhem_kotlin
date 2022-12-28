@@ -23,7 +23,7 @@ class Player(
     // game stuff
     var class_:Class = Class()
     var deck:MutableList<Card> = mutableListOf()
-    var hand:MutableList<Card> = mutableListOf()
+    private var hand:MutableList<Card> = mutableListOf()
     var field:MutableList<Card> = mutableListOf()
     var discard:MutableList<Card> = mutableListOf()
     var hp:Int = 0
@@ -193,6 +193,48 @@ class Player(
         return choice("select a card your discard pile", discard.toTypedArray())
     }
 
+    // drawing, removing card, switching hands...
+
+    // TODO take a look at all of these
+
+    fun get_hand_size():Int{
+        return hand.size
+    }
+
+    fun draw(){
+        if(deck.size == 0){
+            shuffle_discard_into_deck()
+        }
+
+        // TODO not sure if this is fast or slow
+        val card = deck[0]
+        deck.remove(card)
+        hand += card
+    }
+
+    fun add_card_to_hand(card:Card){
+        hand += card
+    }
+
+    fun remove_card_from_hand(card:Card){
+        hand -= card
+    }
+
+    fun switch_hands(with:Player){
+        val other_hand = with.hand
+        with.hand = hand
+        hand = other_hand
+    }
+
+    fun pop_last_card_from_discard():Card?{
+        if(discard.size == 0){
+            return null
+        }
+        val last_card = discard.last()
+        discard.remove(last_card)
+        return last_card
+    }
+
     // lobby stuff
 
     fun select_name_and_class(board:Board){
@@ -285,17 +327,6 @@ class Player(
         deck = discard
         discard = mutableListOf()
         deck = deck.shuffled().toMutableList()
-    }
-
-    fun draw(){
-        if(deck.size == 0){
-            shuffle_discard_into_deck()
-        }
-
-        // TODO not sure if this is fast or slow
-        val card = deck[0]
-        deck.removeAt(0)
-        hand += card
     }
 
     fun heal(amount:Int){

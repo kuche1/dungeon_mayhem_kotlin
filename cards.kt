@@ -69,7 +69,7 @@ open class Card(
         board.writeln("${this}")
 
         // remove from hand
-        player.hand.remove(this)
+        player.remove_card_from_hand(this)
 
         // activate effects
         special_effect(player, board)
@@ -607,9 +607,10 @@ class Mind_games(
         if(opponent == null){
             return
         }
-        val op_hand = opponent.hand
-        opponent.hand = caster.hand
-        caster.hand = op_hand
+        // val op_hand = opponent.hand
+        // opponent.hand = caster.hand
+        // caster.hand = op_hand
+        caster.switch_hands(opponent)
     }
 }
 
@@ -626,12 +627,11 @@ class Tell_me_about_your_mother(
             if(player.is_dead()){
                 continue
             }
-            if(player.discard.size == 0){
+            val last_card = player.pop_last_card_from_discard()
+            if(last_card == null){
                 continue
             }
-            val last_card = player.discard.last()
-            player.discard.remove(last_card)
-            caster.hand += last_card
+            caster.add_card_to_hand(last_card)
         }
     }
 }
@@ -649,7 +649,7 @@ class Mind_blast(
         if(opponent == null){
             return
         }
-        var dmg = opponent.hand.size
+        var dmg = opponent.get_hand_size()
         if(dmg > 5){
             dmg = 5
         }
@@ -898,8 +898,8 @@ class Divine_inspiration(original_owner:Player,):Card(original_owner,
         if(card == null){
             return
         }
-        caster.discard -= card // TODO this syntax might be incorrect
-        caster.hand += card
+        caster.discard -= card
+        caster.add_card_to_hand(card)
     }
 }
 
