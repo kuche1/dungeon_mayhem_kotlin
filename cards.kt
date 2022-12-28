@@ -1243,3 +1243,227 @@ class Harmless_pile_of_rocks(original_owner:Player):Card(original_owner,
     dmg=2,
     thunder=1,
 )
+
+/////////////////////////////////////////////////////////////////////////////// oriax
+
+class Clever_disguise(original_owner:Player,):Card(original_owner,
+    name="Clever Disguise",
+    occur=2,
+    desc="None of your opponents' cards affect you or your ${ICON_SHIELD} cards until your next turn.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false){"not implemented"}
+    }
+}
+
+class Sneak_attack(original_owner:Player,):Card(original_owner,
+    name="Sneak Attack!",
+    occur=2,
+    thunder=1,
+    desc="Destroy one ${ICON_SHIELD} card in play.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false){"not implemented"}
+    }
+}
+
+class Pick_pocket(original_owner:Player,):Card(original_owner,
+    name="Pick Pocket",
+    occur=2,
+    desc="Steal the top card of any player's deck and play it.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false){"not implemented"}
+    }
+}
+
+class Even_more_daggers(original_owner:Player):Card(original_owner,
+    name="Even More Daggers",
+    occur=1,
+    draw=2,
+    heal=1,
+)
+
+class All_the_thrown_daggers(original_owner:Player):Card(original_owner,
+    name="All the Thrown Daggers",
+    occur=3,
+    dmg=3,
+)
+
+class One_thrown_dagger(original_owner:Player):Card(original_owner,
+    name="One Thrown Dagger",
+    occur=5,
+    dmg=1,
+    thunder=1,
+)
+
+class My_little_friend(original_owner:Player):Card(original_owner,
+    name="My Little Friend",
+    occur=1,
+    shield_max=3,
+)
+
+class Winged_serpent(original_owner:Player):Card(original_owner,
+    name="Winged Serpent",
+    occur=2,
+    shield_max=1,
+    draw=1,
+)
+
+class Stolen_potion(original_owner:Player):Card(original_owner,
+    name="Stolen Potion",
+    occur=2,
+    heal=1,
+    thunder=1,
+)
+
+class The_goon_squad(original_owner:Player):Card(original_owner,
+    name="The Goon Squad",
+    occur=2,
+    shield_max=2,
+)
+
+class Two_thrown_daggers(original_owner:Player):Card(original_owner,
+    name="Two Thrown Daggers",
+    occur=4,
+    dmg=2,
+)
+
+class Cunning_action(original_owner:Player):Card(original_owner,
+    name="Cunning Action",
+    occur=1,
+    thunder=2,
+)
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+
+// class (original_owner:Player):Card(original_owner,
+//     name="",
+//     occur=1,
+
+// )
+

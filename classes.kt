@@ -243,9 +243,26 @@ class Class_mimi_lechaise:Class(
 }
 
 class Class_oriax:Class(
-    name = "Oriax (unplayable)",
+    name = "Oriax (unplayable) (effects missing)",
     color = COL_MAGENTA_DARK,
-)
+){
+    override fun generate_deck_uncked(p:Player):Array<Card>{
+        return arrayOf(
+            Clever_disguise(p), Clever_disguise(p),
+            Sneak_attack(p), Sneak_attack(p),
+            Pick_pocket(p), Pick_pocket(p),
+            Even_more_daggers(p),
+            All_the_thrown_daggers(p), All_the_thrown_daggers(p), All_the_thrown_daggers(p),
+            One_thrown_dagger(p), One_thrown_dagger(p), One_thrown_dagger(p), One_thrown_dagger(p), One_thrown_dagger(p),
+            My_little_friend(p),
+            Winged_serpent(p), Winged_serpent(p),
+            Stolen_potion(p), Stolen_potion(p),
+            The_goon_squad(p), The_goon_squad(p),
+            Two_thrown_daggers(p), Two_thrown_daggers(p), Two_thrown_daggers(p), Two_thrown_daggers(p),
+            Cunning_action(p),
+        )
+    }
+}
 
 class Class_sutha:Class(
     name = "Sutha (unplayable)",
