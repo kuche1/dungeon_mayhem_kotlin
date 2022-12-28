@@ -1139,3 +1139,107 @@ class Investment_opportunity(original_owner:Player):Card(original_owner,
     heal=1,
     draw=1,
 )
+
+/////////////////////////////////////////////////////////////////////////////// mimi lechaise
+
+class Definetely_just_a_mirror(original_owner:Player,):Card(original_owner,
+    name="Definetely Just a Mirror",
+    occur=2,
+    desc="Play this card as a copy of any other ${ICON_SHIELD} card in play.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false){"not implemented"}
+    }
+}
+
+class A_book_cannot_bite(original_owner:Player,):Card(original_owner,
+    name="A Book (Cannot Bite)",
+    occur=3,
+    desc="Use the top-listed Mighty Power of the player to your self or right.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false){"not implemented"}
+    }
+}
+
+class Its_not_a_trap(original_owner:Player,):Card(original_owner,
+    name="It's Not a Trap",
+    occur=2,
+    desc="Make one player's hit points equal to another player's hit points.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false){"not implemented"}
+    }
+}
+
+class Definetely_not_a_trap(original_owner:Player):Card(original_owner,
+    name="Definetely Not a Trap",
+    occur=3,
+    dmg=2,
+)
+
+class Not_a_mimic_really(original_owner:Player):Card(original_owner,
+    name="Not a Mimic (Really)",
+    occur=1,
+    shield_max=2,
+)
+
+class Completely_safe_door(original_owner:Player):Card(original_owner,
+    name="Completely Safe Door",
+    occur=2,
+    thunder=2,
+)
+
+class A_well_fitted_hat(original_owner:Player):Card(original_owner,
+    name="A Well-Fitted Hat",
+    occur=2,
+    dmg=1,
+    thunder=1,
+)
+
+class A_potted_plant_honest(original_owner:Player):Card(original_owner,
+    name="A Potted Plant (Honest!)",
+    occur=2,
+    shield_max=1,
+    dmg=1,
+)
+
+class Just_another_coat_rack(original_owner:Player):Card(original_owner,
+    name="Just Another Coat Rack",
+    occur=2,
+    heal=2,
+)
+
+class Non_carnivorous_couch(original_owner:Player):Card(original_owner,
+    name="Non-Carnivorous Couch",
+    occur=2,
+    dmg=2,
+    heal=1,
+)
+
+class Probably_just_dirty_socks(original_owner:Player):Card(original_owner,
+    name="Probably Just Dirty Socks",
+    occur=2,
+    draw=3,
+)
+
+class A_delicious_pie(original_owner:Player):Card(original_owner,
+    name="A Delicious Pie!",
+    occur=2,
+    dmg=2,
+    draw=1,
+)
+
+class Actually_an_empty_chest(original_owner:Player):Card(original_owner,
+    name="Actually an Empty Chest",
+    occur=2,
+    shield_max=1,
+    draw=1,
+)
+
+class Harmless_pile_of_rocks(original_owner:Player):Card(original_owner,
+    name="Harmless Pile of Rocks",
+    occur=1,
+    dmg=2,
+    thunder=1,
+)

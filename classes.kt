@@ -219,9 +219,28 @@ class Class_lord_cinderpuff:Class(
 }
 
 class Class_mimi_lechaise:Class(
-    name = "Mimi LeChaise (unplayable)",
+    name = "Mimi LeChaise (unplayable) (effects missing)",
     color = COL_GREEN_DARK,
-)
+){
+    override fun generate_deck_uncked(p:Player):Array<Card>{
+        return arrayOf(
+            Definetely_just_a_mirror(p), Definetely_just_a_mirror(p),
+            A_book_cannot_bite(p), A_book_cannot_bite(p), A_book_cannot_bite(p),
+            Its_not_a_trap(p), Its_not_a_trap(p),
+            Definetely_not_a_trap(p), Definetely_not_a_trap(p), Definetely_not_a_trap(p),
+            Not_a_mimic_really(p),
+            Completely_safe_door(p), Completely_safe_door(p),
+            A_well_fitted_hat(p), A_well_fitted_hat(p),
+            A_potted_plant_honest(p), A_potted_plant_honest(p),
+            Just_another_coat_rack(p), Just_another_coat_rack(p),
+            Non_carnivorous_couch(p), Non_carnivorous_couch(p),
+            Probably_just_dirty_socks(p), Probably_just_dirty_socks(p),
+            A_delicious_pie(p), A_delicious_pie(p),
+            Actually_an_empty_chest(p), Actually_an_empty_chest(p),
+            Harmless_pile_of_rocks(p),
+        )
+    }
+}
 
 class Class_oriax:Class(
     name = "Oriax (unplayable)",
