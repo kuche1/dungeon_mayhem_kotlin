@@ -19,8 +19,10 @@ open class Card(
     val desc:String = "",
 ){
     var shield:Int
+    var owner:Player
 
     init{
+        owner = original_owner
         shield = shield_max
     }
 
@@ -62,6 +64,8 @@ open class Card(
     }
 
     fun summon(player:Player, board:Board){
+        require(player == owner)
+
         // announce
         board.writeln()
         board.writeln("${player.toString(short=true)}")
@@ -92,14 +96,20 @@ open class Card(
     }
 
     fun destroy(current_owner:Player, destroyer:Player){
+        require(owner == current_owner)
+
         // remove from field
-        current_owner.remove_card_from_field(this)
+        owner.remove_card_from_field(this)
         // activate on_destroy effect
-        on_destroy_special_effect(destroyer, current_owner)
+        on_destroy_special_effect(destroyer, owner)
         // restore the internal state in case anyone needs to take the card out of the discard pile
         shield = shield_max
         // add to discard pile
-        original_owner.add_card_to_discard(this)
+        owner.add_card_to_discard(this)
+    }
+
+    fun discard(){ // TODO use this!!!
+
     }
 
     open fun on_destroy_special_effect(destroyer:Player, current_card_owner:Player){

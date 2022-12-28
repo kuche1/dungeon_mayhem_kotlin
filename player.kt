@@ -191,19 +191,8 @@ class Player(
 
     // drawing, removing card, switching hands...
 
-    // TODO take a look at all of these
-
     fun get_hand_size():Int{
         return hand.size
-    }
-
-    fun is_this_card_on_your_field(card:Card):Boolean{
-        for(card_f in field){
-            if(card_f == card){
-                return true
-            }
-        }
-        return false
     }
 
     fun get_shield_cards_on_field():Array<Card>{
@@ -218,6 +207,7 @@ class Player(
 
     fun add_card_to_hand(card:Card){
         hand += card
+        card.owner = this
     }
 
     fun remove_card_from_hand(card:Card){
@@ -226,6 +216,7 @@ class Player(
 
     fun add_card_to_field(card:Card){
         field += card
+        card.owner = this
     }
 
     fun remove_card_from_field(card:Card){
@@ -234,6 +225,16 @@ class Player(
 
     fun add_card_to_discard(card:Card){
         discard += card
+        card.owner = this
+    }
+
+    fun is_this_card_on_your_field(card:Card):Boolean{
+        for(card_f in field){
+            if(card_f == card){
+                return true
+            }
+        }
+        return false
     }
 
     fun draw(){
@@ -242,15 +243,23 @@ class Player(
         }
 
         // TODO not sure if this is fast or slow
+        // we could switch it up for the last card instead
         val card = deck[0]
         deck.remove(card)
-        hand += card
+        add_card_to_hand(card)
     }
 
     fun switch_hands(with:Player){
         val other_hand = with.hand
         with.hand = hand
         hand = other_hand
+
+        for(card in hand){
+            card.owner = this
+        }
+        for(card in with.hand){
+            card.owner = with
+        }
     }
 
     fun pop_last_card_from_discard():Card?{
