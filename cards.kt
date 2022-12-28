@@ -10,7 +10,7 @@ import board.Board
 open class Card(
     val original_owner:Player,
     val name:String = "unnamed",
-    val occur:Int = 1,
+    val occur:Int = -1,
     val dmg:Int = 0,
     val shield_max:Int = 0,
     val heal:Int = 0,
@@ -781,7 +781,7 @@ class To_the_face(original_owner:Player,):Card(original_owner,
 }
 
 class Owlbear_boogie(original_owner:Player,):Card(original_owner,
-    name="Owlbear_boogie",
+    name="Owlbear Boogie",
     occur=2,
     desc="Each player may do a little dance and then ${ICON_DRAW}. You ${ICON_DRAW} for each player who danced.",
 ){
@@ -882,5 +882,117 @@ class Crushing_hug(original_owner:Player):Card(original_owner,
 class Intermission(original_owner:Player):Card(original_owner,
     name="Intermission",
     occur=1,
+    draw=2,
+)
+
+/////////////////////////////////////////////////////////////////////////////// lia
+
+class Divine_inspiration(original_owner:Player,):Card(original_owner,
+    name="Divine Inspiration",
+    occur=2,
+    heal=2,
+    desc="Choose any card in your discard pile and put it into your hand.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        val card = caster.choose_card_from_discard()
+        if(card == null){
+            return
+        }
+        caster.discard -= card // TODO this syntax might be incorrect
+        caster.hand += card
+    }
+}
+
+class Banishing_smite(original_owner:Player,):Card(original_owner,
+    name="Banishing Smite",
+    occur=1,
+    thunder=1,
+    desc="Destroy all ${ICON_SHIELD} cards in play (including yours).",
+){
+    override fun special_effect(caster:Player, board:Board){
+        for(player in board.players){
+            if(player.is_dead()){
+                continue
+            }
+            var idx = player.field.size - 1
+            while(idx >= 0){
+                val card = player.field[idx]
+                if(card.shield_max > 0){
+                    card.destroy(board.find_card_owner(card), caster)
+                }
+                idx -= 1
+            }
+        }
+    }
+}
+
+class For_even_more_justice(original_owner:Player):Card(original_owner,
+    name="For Even More Justice!",
+    occur=4,
+    dmg=2,
+)
+
+class Spinning_parry(original_owner:Player):Card(original_owner,
+    name="Spinning Parry",
+    occur=2,
+    draw=1,
+    shield_max=1,
+)
+
+class Divine_smite(original_owner:Player):Card(original_owner,
+    name="Divine Smite",
+    occur=3,
+    dmg=3,
+    heal=1,
+)
+
+class Cure_wounds(original_owner:Player):Card(original_owner,
+    name="Cure Wounds",
+    occur=1,
+    draw=2,
+    heal=1,
+)
+
+class For_justice(original_owner:Player):Card(original_owner,
+    name="For Justice!",
+    occur=3,
+    dmg=1,
+    thunder=1,
+)
+
+class Finger_wag_of_judgement(original_owner:Player):Card(original_owner,
+    name="Finger-wag of Judgement",
+    occur=2,
+    thunder=2,
+)
+
+class Fighting_words(original_owner:Player):Card(original_owner,
+    name="Fighting Words",
+    occur=3,
+    dmg=2,
+    heal=1,
+)
+
+class Divine_shield(original_owner:Player):Card(original_owner,
+    name="Divine Shield",
+    occur=2,
+    shield_max=3,
+)
+
+class For_the_most_justice(original_owner:Player):Card(original_owner,
+    name="For the Most Justice!",
+    occur=2,
+    dmg=3,
+)
+
+class Fluffy(original_owner:Player):Card(original_owner,
+    name="Fluffy",
+    occur=1,
+    shield_max=3,
+)
+
+class High_charisma(original_owner:Player):Card(original_owner,
+    name="High Charisma",
+    occur=2,
     draw=2,
 )

@@ -189,6 +189,10 @@ class Player(
         return choices[choice_int]
     }
 
+    fun choose_card_from_discard():Card?{
+        return choice("select a card your discard pile", discard.toTypedArray())
+    }
+
     // lobby stuff
 
     fun select_name_and_class(board:Board){

@@ -172,9 +172,27 @@ class Class_hoots_mcgoots:Class(
 }
 
 class Class_lia:Class(
-    name = "Lia (unplayable)",
+    name = "Lia",
     color = COL_RED_DARK,
-)
+){
+    override fun generate_deck_uncked(p:Player):Array<Card>{
+        return arrayOf(
+            Divine_inspiration(p), Divine_inspiration(p),
+            Banishing_smite(p),
+            For_even_more_justice(p), For_even_more_justice(p), For_even_more_justice(p), For_even_more_justice(p),
+            Spinning_parry(p), Spinning_parry(p),
+            Divine_smite(p), Divine_smite(p), Divine_smite(p),
+            Cure_wounds(p),
+            For_justice(p), For_justice(p), For_justice(p),
+            Finger_wag_of_judgement(p), Finger_wag_of_judgement(p),
+            Fighting_words(p), Fighting_words(p), Fighting_words(p),
+            Divine_shield(p), Divine_shield(p),
+            For_the_most_justice(p), For_the_most_justice(p),
+            Fluffy(p),
+            High_charisma(p), High_charisma(p),
+        )
+    }
+}
 
 class Class_lord_cinderpuff:Class(
     name = "Lord Cinderpuff (unplayable)",
