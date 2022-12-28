@@ -25,7 +25,7 @@ class Player(
     var deck:MutableList<Card> = mutableListOf()
     private var hand:MutableList<Card> = mutableListOf()
     private var field:MutableList<Card> = mutableListOf()
-    var discard:MutableList<Card> = mutableListOf()
+    private var discard:MutableList<Card> = mutableListOf()
     var hp:Int = 0
     var thunder:Int = 0
     // card effects
@@ -189,10 +189,6 @@ class Player(
         return choices[choice_int]
     }
 
-    fun choose_card_from_discard():Card?{
-        return choice("select a card your discard pile", discard.toTypedArray())
-    }
-
     // drawing, removing card, switching hands...
 
     // TODO take a look at all of these
@@ -220,6 +216,26 @@ class Player(
         return shields
     }
 
+    fun add_card_to_hand(card:Card){
+        hand += card
+    }
+
+    fun remove_card_from_hand(card:Card){
+        hand -= card
+    }
+
+    fun add_card_to_field(card:Card){
+        field += card
+    }
+
+    fun remove_card_from_field(card:Card){
+        field -= card
+    }
+
+    fun add_card_to_discard(card:Card){
+        discard += card
+    }
+
     fun draw(){
         if(deck.size == 0){
             shuffle_discard_into_deck()
@@ -229,14 +245,6 @@ class Player(
         val card = deck[0]
         deck.remove(card)
         hand += card
-    }
-
-    fun add_card_to_hand(card:Card){
-        hand += card
-    }
-
-    fun remove_card_from_hand(card:Card){
-        hand -= card
     }
 
     fun switch_hands(with:Player){
@@ -254,12 +262,13 @@ class Player(
         return last_card
     }
 
-    fun add_card_to_field(card:Card){
-        field += card
-    }
-
-    fun remove_card_from_field(card:Card){
-        field -= card
+    fun choose_and_pop_card_from_discard():Card?{
+        val card = choice("select a card from your discard pile", discard.toTypedArray())
+        if(card == null){
+            return null
+        }
+        discard -= card
+        return card
     }
 
     // lobby stuff

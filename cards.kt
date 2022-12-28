@@ -99,7 +99,7 @@ open class Card(
         // restore the internal state in case anyone needs to take the card out of the discard pile
         shield = shield_max
         // add to discard pile
-        original_owner.discard += this
+        original_owner.add_card_to_discard(this)
     }
 
     open fun on_destroy_special_effect(destroyer:Player, current_card_owner:Player){
@@ -889,11 +889,10 @@ class Divine_inspiration(original_owner:Player,):Card(original_owner,
     desc="Choose any card in your discard pile and put it into your hand.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        val card = caster.choose_card_from_discard()
+        val card = caster.choose_and_pop_card_from_discard()
         if(card == null){
             return
         }
-        caster.discard -= card
         caster.add_card_to_hand(card)
     }
 }
