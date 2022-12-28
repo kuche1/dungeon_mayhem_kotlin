@@ -99,7 +99,7 @@ open class Card(
         // remove from field
         owner.remove_card_from_field(this)
         // activate on_destroy effect
-        on_destroy_special_effect(destroyer, owner)
+        on_destroy_special_effect(destroyer)
         // restore the internal state in case anyone needs to take the card out of the discard pile
         shield = shield_max
         // add to discard pile
@@ -110,7 +110,7 @@ open class Card(
 
     }
 
-    open fun on_destroy_special_effect(destroyer:Player, current_card_owner:Player){
+    open fun on_destroy_special_effect(destroyer:Player){
         // do nothing by default
     }
 
@@ -304,8 +304,8 @@ class Burped_up_bones(
     shield_max=3,
     desc="When this card is destroyed ${ICON_DMG} ${ICON_DMG}"
 ){
-    override fun on_destroy_special_effect(destroyer:Player, current_card_owner:Player){
-        destroyer.on_damaged(2, current_card_owner)
+    override fun on_destroy_special_effect(destroyer:Player){
+        destroyer.on_damaged(2, this.owner)
     }
 }
 
