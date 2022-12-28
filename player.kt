@@ -22,7 +22,7 @@ class Player(
     var disconnected:Boolean = false
     // game stuff
     var class_:Class = Class()
-    var deck:MutableList<Card> = mutableListOf()
+    private var deck:MutableList<Card> = mutableListOf()
     private var hand:MutableList<Card> = mutableListOf()
     private var field:MutableList<Card> = mutableListOf()
     private var discard:MutableList<Card> = mutableListOf()
