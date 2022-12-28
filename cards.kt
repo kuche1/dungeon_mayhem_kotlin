@@ -9,8 +9,8 @@ import board.Board
 
 open class Card(
     val original_owner:Player,
+    val occur:Int,
     val name:String = "unnamed",
-    val occur:Int = -1,
     val dmg:Int = 0,
     val shield_max:Int = 0,
     val heal:Int = 0,
@@ -993,4 +993,117 @@ class High_charisma(original_owner:Player):Card(original_owner,
     name="High Charisma",
     occur=2,
     draw=2,
+)
+
+/////////////////////////////////////////////////////////////////////////////// lord cinderpuff
+
+class Hostile_takeover(original_owner:Player,):Card(original_owner,
+    name="Hostile Takeover",
+    occur=3,
+    desc="${ICON_DMG} all opponents. ${ICON_DMG} ${ICON_DMG} one opponent. Then ${ICON_DMG} a different opponent.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false)
+        // 1 dmg to all
+        for(player in board.players){
+            if(player.is_dead() || player == caster){
+                continue
+            }
+            player.on_damaged(1, caster)
+        }
+        // 2 dmg to one
+        // target1 = board.choose_opponent(caster)
+        // 1 dmg to another
+        // TODO
+    }
+}
+
+class Liquidate_assets(original_owner:Player,):Card(original_owner,
+    name="Liquidate Assets",
+    occur=2,
+    desc="Discard your hand and ${ICON_DMG} equal to the number of cards discarded (max of 5 damage).",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false)
+    }
+}
+
+class Murderous_and_acquisitions(original_owner:Player,):Card(original_owner,
+    name="Murderous and Acquisitions",
+    occur=2,
+    desc="Each player must ${ICON_DMG}, ${ICON_HEAL}, or ${ICON_DRAW}. Start with you and go right. You repeat all choices.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        require(false)
+    }
+}
+
+class Wing_buffet(original_owner:Player):Card(original_owner,
+    name="Wing Buffet",
+    occur=2,
+    dmg=2,
+)
+
+class Eviler_sneer(original_owner:Player):Card(original_owner,
+    name="Eviler Sneer",
+    occur=2,
+    heal=1,
+    thunder=1,
+)
+
+class Peaceful_nap(original_owner:Player):Card(original_owner,
+    name="Peaceful Nap",
+    occur=1,
+    draw=3,
+)
+
+class Tooth_and_claw(original_owner:Player):Card(original_owner,
+    name="Tooth and Claw",
+    occur=2,
+    dmg=3,
+)
+
+class Kobold_maid(original_owner:Player):Card(original_owner,
+    name="Kobold Maid",
+    occur=2,
+    shield_max=1,
+    dmg=1,
+)
+
+class Ancient_anger(original_owner:Player):Card(original_owner,
+    name="Ancient Anger",
+    occur=3,
+    dmg=1,
+    thunder=1,
+)
+
+class Wall_of_money(original_owner:Player):Card(original_owner,
+    name="Wall of Money",
+    occur=2,
+    shield_max=2,
+)
+
+class Wisdom_of_ages(original_owner:Player):Card(original_owner,
+    name="Wisdom of Ages",
+    occur=2,
+    draw=2,
+)
+
+class Bull_market(original_owner:Player):Card(original_owner,
+    name="Bull Market",
+    occur=2,
+    thunder=2,
+)
+
+class Mob_of_lawyers(original_owner:Player):Card(original_owner,
+    name="Mob of Lawyers",
+    occur=1,
+    shield_max=3,
+)
+
+class Investment_opportunity(original_owner:Player):Card(original_owner,
+    name="Investment Opportunity",
+    occur=2,
+    heal=1,
+    draw=1,
 )
