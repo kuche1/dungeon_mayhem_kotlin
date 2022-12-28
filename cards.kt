@@ -1335,77 +1335,132 @@ class Cunning_action(original_owner:Player):Card(original_owner,
     thunder=2,
 )
 
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
+/////////////////////////////////////////////////////////////////////////////// sutha
 
-// )
+class Whirling_axes(original_owner:Player,):Card(original_owner,
+    name="Whirling Axes",
+    occur=2,
+    desc="You ${ICON_HEAL} once per opponent, then ${ICON_DMG} each opponent.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        for(player in board.players){
+            if(player.is_dead()){
+                continue
+            }
+            caster.heal(1)
+            player.on_damaged(1, caster)
+        }
+    }
+}
 
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
+class Battle_roar(original_owner:Player,):Card(original_owner,
+    name="Battle Roar",
+    occur=2,
+    thunder=1,
+    desc="Each player (including you) discards their hand, then draws three cards.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        for(player in board.players){
+            if(player.is_dead()){
+                continue
+            }
+            player.discard_hand()
+            player.draw()
+            require(player.get_hand_size() == 3)
+        }
+    }
+}
 
-// )
+class Mighty_toss(original_owner:Player,):Card(original_owner,
+    name="Mighty Toss",
+    occur=2,
+    draw=1,
+    desc="Destroy one ${ICON_SHIELD} card in play.",
+){
+    override fun special_effect(caster:Player, board:Board){
+        val card = board.choose_shield_card(caster)
+        if(card == null){
+            return
+        }
+        card.destroy(caster)
+    }
+}
 
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
+class Rage(original_owner:Player):Card(original_owner,
+    name="RAGE!",
+    occur=2,
+    dmg=4,
+)
 
-// )
+class Riff(original_owner:Player):Card(original_owner,
+    name="Riff",
+    occur=1,
+    shield_max=3,
+)
 
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
+class Big_axe_is_best_axe(original_owner:Player):Card(original_owner,
+    name="Big Axe is Best Axe",
+    occur=5,
+    dmg=3,
+)
 
-// )
+class Brutal_punch(original_owner:Player):Card(original_owner,
+    name="Brutal Punch",
+    occur=2,
+    dmg=2,
+)
 
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
+class Head_butt(original_owner:Player):Card(original_owner,
+    name="Head Butt",
+    occur=2,
+    dmg=1,
+    thunder=1,
+)
 
-// )
+class Two_axes_are_better_than_one(original_owner:Player):Card(original_owner,
+    name="Two Axes Are Better Than One",
+    occur=2,
+    thunder=2,
+)
 
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
+class Raff(original_owner:Player):Card(original_owner,
+    name="Raff",
+    occur=1,
+    shield_max=3,
+)
 
-// )
+class Spiked_shield(original_owner:Player):Card(original_owner,
+    name="Spiked Shield",
+    occur=1,
+    shield_max=2,
+)
 
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
+class Open_the_armory(original_owner:Player):Card(original_owner,
+    name="Open the Armory",
+    occur=2,
+    draw=2,
+)
 
-// )
+class Bag_of_rats(original_owner:Player):Card(original_owner,
+    name="Bag of Rats",
+    occur=1,
+    shield_max=1,
+    draw=1,
+)
 
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
+class Flex(original_owner:Player):Card(original_owner,
+    name="Flex!",
+    occur=2,
+    heal=1,
+    draw=1,
+)
 
-// )
-
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
-
-// )
-
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
-
-// )
-
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
-
-// )
-
-// class (original_owner:Player):Card(original_owner,
-//     name="",
-//     occur=1,
-
-// )
+class Snack_time(original_owner:Player):Card(original_owner,
+    name="Snack Time",
+    occur=1,
+    draw=2,
+    heal=1,
+)
 
 // class (original_owner:Player):Card(original_owner,
 //     name="",

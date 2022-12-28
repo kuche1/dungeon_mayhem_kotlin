@@ -265,9 +265,29 @@ class Class_oriax:Class(
 }
 
 class Class_sutha:Class(
-    name = "Sutha (unplayable)",
+    name = "Sutha",
     color = COL_GREEN_BRIGHT,
-)
+){
+    override fun generate_deck_uncked(p:Player):Array<Card>{
+        return arrayOf(
+            Whirling_axes(p), Whirling_axes(p),
+            Battle_roar(p), Battle_roar(p),
+            Mighty_toss(p), Mighty_toss(p),
+            Rage(p), Rage(p),
+            Riff(p),
+            Big_axe_is_best_axe(p), Big_axe_is_best_axe(p), Big_axe_is_best_axe(p), Big_axe_is_best_axe(p), Big_axe_is_best_axe(p),
+            Brutal_punch(p), Brutal_punch(p),
+            Head_butt(p), Head_butt(p),
+            Two_axes_are_better_than_one(p), Two_axes_are_better_than_one(p),
+            Raff(p),
+            Spiked_shield(p),
+            Open_the_armory(p), Open_the_armory(p),
+            Bag_of_rats(p),
+            Flex(p), Flex(p),
+            Snack_time(p),
+        )
+    }
+}
 
 val ALL_CLASSES = arrayOf(
     Class_azzan(),
