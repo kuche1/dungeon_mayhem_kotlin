@@ -72,12 +72,17 @@ class Player(
                 if(attacks_hit_all_opponents_until_next_turn){
                     ret += "    attacks hit all opponents until next turn\n"
                 }
-                if(field.size > 0){
-                    ret += "    field:\n"
+
+                
+                ret += "    field:\n"
+                if(field.size == 0){
+                    ret += "        no cards on field"
+                }else{
                     for(card in field){
-                    ret += "        ${card}\n"
+                        ret += "        ${card}\n"
                     }
                 }
+
                 if(show_private){
                     ret += "    hand:\n"
                     for(card in hand){
@@ -247,6 +252,14 @@ class Player(
         val card = deck[0]
         deck.remove(card)
         add_card_to_hand(card)
+    }
+
+    fun discard_hand(){
+        while(hand.size > 0){
+            remove_card_from_hand(hand[0])
+        }
+        draw()
+        draw()
     }
 
     fun switch_hands(with:Player){

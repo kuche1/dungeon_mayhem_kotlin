@@ -34,7 +34,7 @@ open class Card(
         if(align_left){
             ret += "-"
         }
-        ret += "25s" // TODO do something about this fucking retarded shit, hardcoding this is cancer
+        ret += "26s" // TODO do something about this fucking retarded shit, hardcoding this is cancer
         ret = ret.format(name)
 
         ret += " <"
@@ -1003,7 +1003,6 @@ class Hostile_takeover(original_owner:Player,):Card(original_owner,
     desc="${ICON_DMG} all opponents. ${ICON_DMG} ${ICON_DMG} one opponent. Then ${ICON_DMG} a different opponent.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false)
         // 1 dmg to all
         for(player in board.players){
             if(player.is_dead() || player == caster){
@@ -1012,9 +1011,17 @@ class Hostile_takeover(original_owner:Player,):Card(original_owner,
             player.on_damaged(1, caster)
         }
         // 2 dmg to one
-        // target1 = board.choose_opponent(caster)
+        val target1 = board.choose_opponent(caster)
+        if(target1 == null){
+            return
+        }
+        target1.on_damaged(2, caster)
         // 1 dmg to another
-        // TODO
+        val target2 = board.choose_opponent(caster, except=target1)
+        if(target2 == null){
+            return
+        }
+        target2.on_damaged(1, caster)
     }
 }
 
@@ -1024,7 +1031,12 @@ class Liquidate_assets(original_owner:Player,):Card(original_owner,
     desc="Discard your hand and ${ICON_DMG} equal to the number of cards discarded (max of 5 damage).",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false)
+        var dmg = caster.get_hand_size()
+        if(dmg > 5){
+            dmg = 5
+        }
+        caster.discard_hand()
+        board.damage_player(caster, dmg)
     }
 }
 
@@ -1034,7 +1046,27 @@ class Murderous_and_acquisitions(original_owner:Player,):Card(original_owner,
     desc="Each player must ${ICON_DMG}, ${ICON_HEAL}, or ${ICON_DRAW}. Start with you and go right. You repeat all choices.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false)
+        for(player in board.players){ // TODO multithread this
+            if(player.is_dead()){
+                continue
+            }
+            val choice = player.choice("select action", arrayOf(ICON_DMG, ICON_HEAL, ICON_DRAW))
+            when(choice){
+                ICON_DMG->{
+                    board.damage_player(player, 1)
+                    board.damage_player(caster, 1)
+                }
+                ICON_HEAL->{
+                    player.heal(1)
+                    caster.heal(1)
+                }
+                ICON_DRAW->{
+                    player.draw()
+                    caster.draw()
+                }
+                else->require(false)
+            }
+        }
     }
 }
 

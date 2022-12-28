@@ -195,9 +195,29 @@ class Class_lia:Class(
 }
 
 class Class_lord_cinderpuff:Class(
-    name = "Lord Cinderpuff (unplayable)",
+    name = "Lord Cinderpuff",
     color = COL_CYAN_DARK,
-)
+){
+    override fun generate_deck_uncked(p:Player):Array<Card>{
+        return arrayOf(
+            Hostile_takeover(p), Hostile_takeover(p), Hostile_takeover(p),
+            Liquidate_assets(p), Liquidate_assets(p),
+            Murderous_and_acquisitions(p), Murderous_and_acquisitions(p),
+            Wing_buffet(p), Wing_buffet(p),
+            Eviler_sneer(p), Eviler_sneer(p),
+            Peaceful_nap(p),
+            Tooth_and_claw(p), Tooth_and_claw(p),
+            Kobold_maid(p), Kobold_maid(p),
+            Ancient_anger(p), Ancient_anger(p), Ancient_anger(p),
+            Wall_of_money(p), Wall_of_money(p),
+            Wisdom_of_ages(p), Wisdom_of_ages(p),
+            Bull_market(p), Bull_market(p),
+            Mob_of_lawyers(p),
+            Investment_opportunity(p), Investment_opportunity(p),
+        )
+    }
+}
+
 
 class Class_mimi_lechaise:Class(
     name = "Mimi LeChaise (unplayable)",

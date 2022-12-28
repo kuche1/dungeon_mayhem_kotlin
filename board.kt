@@ -103,11 +103,16 @@ class Board(){
 
     // choosing
 
-    fun choose_opponent(caster:Player):Player?{
+    fun choose_opponent(caster:Player, except:Player?=null):Player?{
         var targets:Array<Player> = arrayOf()
         for(player in players){
             if(player.is_dead() || player == caster){
                 continue
+            }
+            if(except != null){
+                if(player == except){
+                    continue
+                }
             }
             targets += player
         }
