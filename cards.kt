@@ -83,7 +83,7 @@ open class Card(
         }
 
         // add to field
-        player.field += this
+        player.add_card_to_field(this)
 
         // and remove from board if no shield
         if(shield <= 0){
@@ -93,7 +93,7 @@ open class Card(
 
     fun destroy(current_owner:Player, destroyer:Player){
         // remove from field
-        current_owner.field.remove(this)
+        current_owner.remove_card_from_field(this)
         // activate on_destroy effect
         on_destroy_special_effect(destroyer, current_owner)
         // restore the internal state in case anyone needs to take the card out of the discard pile
@@ -145,8 +145,8 @@ class Charm(
             return
         }
         val card_owner = board.find_card_owner(choosen_card)
-        card_owner.field.remove(choosen_card)
-        caster.field += choosen_card
+        card_owner.remove_card_from_field(choosen_card)
+        caster.add_card_to_field(choosen_card)
     }
 }
 
@@ -468,12 +468,7 @@ class Death_ray(
                 continue
             }
 
-            var to_destroy:Array<Card> = arrayOf()
-            for(card in player.field){
-                if(card.shield_max > 0){
-                    to_destroy += card
-                }
-            }
+            var to_destroy = player.get_shield_cards_on_field()
             if(to_destroy.size == 0){
                 if(player != caster){
                     player.on_damaged(2, caster)
@@ -914,13 +909,9 @@ class Banishing_smite(original_owner:Player,):Card(original_owner,
             if(player.is_dead()){
                 continue
             }
-            var idx = player.field.size - 1
-            while(idx >= 0){
-                val card = player.field[idx]
-                if(card.shield_max > 0){
-                    card.destroy(board.find_card_owner(card), caster)
-                }
-                idx -= 1
+            val shield_cards = player.get_shield_cards_on_field()
+            for(card in shield_cards){
+                card.destroy(board.find_card_owner(card), caster)
             }
         }
     }

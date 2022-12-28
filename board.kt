@@ -121,10 +121,8 @@ class Board(){
             if(player.is_dead()){
                 continue
             }
-            for(card in player.field){
-                if(card.shield_max > 0){
-                    targets += card
-                }
+            for(card in player.get_shield_cards_on_field()){
+                targets += card
             }
         }
         val choice = caster.choice("select a shield card", targets)
@@ -137,10 +135,8 @@ class Board(){
             if(player.is_dead() || player == caster){
                 continue
             }
-            for(card in player.field){
-                if(card.shield > 0){
-                    targets += card
-                }
+            for(card in player.get_shield_cards_on_field()){
+                targets += card
             }
         }
         val choice:Card? = caster.choice("select an opponent's shield card", targets)
@@ -154,15 +150,13 @@ class Board(){
         dmg_cards_target_until_players_next_turn = until_players_next_turn
     }
 
-    fun find_card_owner(card_to_find:Card):Player{
+    fun find_card_owner(card_to_find:Card):Player{ // TODO this needs to stop existing
         var found = 0
         var owner:Player? = null
         for(player in players){
-            for(card in player.field){
-                if(card == card_to_find){
-                    found += 1
-                    owner = player
-                }
+            if(player.is_this_card_on_your_field(card_to_find)){
+                found += 1
+                owner = player
             }
         }
         require(found == 1){"unreachable"}

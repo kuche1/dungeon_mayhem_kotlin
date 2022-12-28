@@ -24,7 +24,7 @@ class Player(
     var class_:Class = Class()
     var deck:MutableList<Card> = mutableListOf()
     private var hand:MutableList<Card> = mutableListOf()
-    var field:MutableList<Card> = mutableListOf()
+    private var field:MutableList<Card> = mutableListOf()
     var discard:MutableList<Card> = mutableListOf()
     var hp:Int = 0
     var thunder:Int = 0
@@ -201,6 +201,25 @@ class Player(
         return hand.size
     }
 
+    fun is_this_card_on_your_field(card:Card):Boolean{
+        for(card_f in field){
+            if(card_f == card){
+                return true
+            }
+        }
+        return false
+    }
+
+    fun get_shield_cards_on_field():Array<Card>{
+        var shields:Array<Card> = arrayOf()
+        for(card in field){
+            if(card.shield_max > 0){
+                shields += card
+            }
+        }
+        return shields
+    }
+
     fun draw(){
         if(deck.size == 0){
             shuffle_discard_into_deck()
@@ -233,6 +252,14 @@ class Player(
         val last_card = discard.last()
         discard.remove(last_card)
         return last_card
+    }
+
+    fun add_card_to_field(card:Card){
+        field += card
+    }
+
+    fun remove_card_from_field(card:Card){
+        field -= card
     }
 
     // lobby stuff
