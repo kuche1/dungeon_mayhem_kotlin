@@ -15,11 +15,13 @@ open class Class(
         return "${color}${name}${COL_RESET}"
     }
 
-    // deck generation
+    // card/deck generation
+    
     open fun generate_deck_uncked(p:Player):Array<Card>{
         require(false){"unreachable"}
         return arrayOf()
     }
+
     private fun check_deck(deck:Array<Card>){
         // TODO super fucking inefficient
         for(card in deck){
@@ -32,12 +34,19 @@ open class Class(
             require(occurances == card.occur){"occurances should have been ${card.occur}, but are in reality ${occurances}"}
         }
     }
+
     fun generate_deck(original_owner:Player):Array<Card>{
         val deck = generate_deck_uncked(original_owner)
         check_deck(deck)
         return deck
     }
+
+    fun generate_card_with_top_mighty_power(player:Player):Card{
+        return generate_deck(player)[0]
+    }
+
     // print cards
+    
     fun print_cards(player:Player){
         // TODO this is really fucking inefficient
         val deck = generate_deck(player)
@@ -219,7 +228,7 @@ class Class_lord_cinderpuff:Class(
 }
 
 class Class_mimi_lechaise:Class(
-    name = "Mimi LeChaise (unplayable) (effects missing)",
+    name = "Mimi LeChaise (unplayable)",
     color = COL_GREEN_DARK,
 ){
     override fun generate_deck_uncked(p:Player):Array<Card>{
@@ -243,7 +252,7 @@ class Class_mimi_lechaise:Class(
 }
 
 class Class_oriax:Class(
-    name = "Oriax (unplayable) (effects missing)",
+    name = "Oriax (unplayable) (1 effect missing)",
     color = COL_MAGENTA_DARK,
 ){
     override fun generate_deck_uncked(p:Player):Array<Card>{

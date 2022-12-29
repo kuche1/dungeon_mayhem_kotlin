@@ -103,6 +103,19 @@ class Board(){
 
     // choosing
 
+    fun choose_player(caster:Player, except:Player?=null):Player?{
+        val targets:Array<Player> = arrayOf()
+        for(player in players){
+            if(player.is_dead()){
+                continue
+            }
+            if(player == except){
+                continue
+            }
+        }
+        return caster.choice("select a player", targets)
+    }
+
     fun choose_opponent(caster:Player, except:Player?=null):Player?{
         var targets:Array<Player> = arrayOf()
         for(player in players){
@@ -118,6 +131,28 @@ class Board(){
         }
         val choice:Player? = caster.choice("select opponent", targets)
         return choice
+    }
+
+    fun choose_opponent_on_left_or_right(caster:Player):Player?{
+        val caster_idx = players.indexOf(caster)
+        var left_idx = caster_idx - 1
+        if(left_idx < 0){
+            left_idx = players.size - 1
+        }
+        val right_idx = (caster_idx + 1) % players.size
+
+        val player_left = players[left_idx]
+        val player_right = players[right_idx]
+        require(player_left != caster)
+        require(player_right != caster)
+
+        var options:Array<Player> = arrayOf(player_left)
+        if(player_left != player_right){
+            options += player_right
+        }
+
+        val player = caster.choice("select an opponent to your left or to your right", options)
+        return player
     }
 
     fun choose_shield_card(caster:Player):Card?{

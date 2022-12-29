@@ -242,7 +242,7 @@ class Player(
         return false
     }
 
-    fun draw(){
+    fun pop_top_card_from_deck():Card{
         if(deck.size == 0){
             shuffle_discard_into_deck()
         }
@@ -251,6 +251,11 @@ class Player(
         // we could switch it up for the last card instead
         val card = deck[0]
         deck.remove(card)
+        return card
+    }
+
+    fun draw(){
+        val card = pop_top_card_from_deck()
         add_card_to_hand(card)
     }
 

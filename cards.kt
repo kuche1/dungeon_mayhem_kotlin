@@ -20,6 +20,7 @@ open class Card(
 ){
     var shield:Int
     var owner:Player
+    var dont_add_to_discard_on_destroy:Boolean = false
 
     init{
         owner = original_owner
@@ -63,6 +64,18 @@ open class Card(
         return ret
     }
 
+    fun copy(original_owner:Player):Card{
+        for(card in original_owner.class_.generate_deck(original_owner)){
+            if(card.name == name){
+                // copy internal state
+                card.shield = shield
+                return card
+            }
+        }
+        require(false)
+        return Card(original_owner, occur=1) // never reached
+    }
+
     fun summon(player:Player, board:Board){
         require(player == owner)
 
@@ -103,7 +116,9 @@ open class Card(
         // restore the internal state in case anyone needs to take the card out of the discard pile
         shield = shield_max
         // add to discard pile
-        owner.add_card_to_discard(this)
+        if(!dont_add_to_discard_on_destroy){
+            owner.add_card_to_discard(this)
+        }
     }
 
     fun discard(){ // TODO use this!!!
@@ -1148,7 +1163,13 @@ class Definetely_just_a_mirror(original_owner:Player,):Card(original_owner,
     desc="Play this card as a copy of any other ${ICON_SHIELD} card in play.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false){"not implemented"}
+        val shield_card = board.choose_shield_card(caster)
+        if(shield_card == null){
+            return
+        }
+        val copy = shield_card.copy(caster)
+        copy.dont_add_to_discard_on_destroy = true
+        caster.add_card_to_field(copy)
     }
 }
 
@@ -1158,7 +1179,12 @@ class A_book_cannot_bite(original_owner:Player,):Card(original_owner,
     desc="Use the top-listed Mighty Power of the player to your self or right.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false){"not implemented"}
+        val player = board.choose_opponent_on_left_or_right(caster)
+        if(player == null){
+            return
+        }
+        val card = player.class_.generate_card_with_top_mighty_power(caster)
+        card.special_effect(caster, board)
     }
 }
 
@@ -1168,7 +1194,19 @@ class Its_not_a_trap(original_owner:Player,):Card(original_owner,
     desc="Make one player's hit points equal to another player's hit points.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false){"not implemented"}
+        caster.writeln("select a player to get the HP from")
+        val from = board.choose_player(caster)
+        if(from == null){
+            return
+        }
+
+        caster.writeln("select a player to set the HP to")
+        val to = board.choose_player(caster, except=from)
+        if(to == null){
+            return
+        }
+        
+        from.hp = to.hp
     }
 }
 
@@ -1263,7 +1301,11 @@ class Sneak_attack(original_owner:Player,):Card(original_owner,
     desc="Destroy one ${ICON_SHIELD} card in play.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false){"not implemented"}
+        val card = board.choose_shield_card(caster)
+        if(card == null){
+            return
+        }
+        card.destroy(caster)
     }
 }
 
@@ -1273,7 +1315,13 @@ class Pick_pocket(original_owner:Player,):Card(original_owner,
     desc="Steal the top card of any player's deck and play it.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false){"not implemented"}
+        val player = board.choose_player(caster)
+        if(player == null){
+            return
+        }
+        val card = player.pop_top_card_from_deck()
+        caster.add_card_to_hand(card)
+        card.summon(caster, board)
     }
 }
 
