@@ -76,7 +76,7 @@ class Player(
                 
                 ret += "    field:\n"
                 if(field.size == 0){
-                    ret += "        no cards on field"
+                    ret += "        no cards on field\n"
                 }else{
                     for(card in field){
                         ret += "        ${card}\n"
