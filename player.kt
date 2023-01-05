@@ -11,16 +11,17 @@ import classes.Class
 import board.Board
 import colors.*
 
-class Player(
-    sock:Socket,
-    var name:String = "unnamed",
-    var ready:Boolean = false,
+open class Player( // `open` since we want to be able to inherit the bots off of this class
+    sock:Socket?,
+    is_bot:Boolean = false,
 ){
     // IO
-    val input:BufferedReader
-    val output:PrintWriter
+    val input:BufferedReader?
+    val output:PrintWriter?
     var disconnected:Boolean = false
     // game stuff
+    var name:String = "unnamed"
+    var ready:Boolean = false
     var class_:Class = Class()
     private var deck:MutableList<Card> = mutableListOf()
     private var hand:MutableList<Card> = mutableListOf()
@@ -28,14 +29,23 @@ class Player(
     private var discard:MutableList<Card> = mutableListOf()
     var hp:Int = 0
     var thunder:Int = 0
+    // bot stuff
+    val is_bot:Boolean
     // card effects
     var shield_penetration_until_end_of_turn:Boolean = false
     var attacks_hit_all_opponents_until_next_turn:Boolean = false
+    var invulnerable_to_opponent_cards_until_next_turn:Boolean = false // TODO effect not fully implemented
 
     init{
-        input = BufferedReader(InputStreamReader(sock.inputStream))
-        // output = PrintWriter(sock.getOutputStream(), true) // flush on every new line
-        output = PrintWriter(sock.getOutputStream()) // don't flush
+        this.is_bot = is_bot
+        if(sock == null){
+            input = null
+            output = null
+        }else{
+            input = BufferedReader(InputStreamReader(sock.inputStream))
+            // output = PrintWriter(sock.getOutputStream(), true) // flush on every new line
+            output = PrintWriter(sock.getOutputStream()) // don't flush
+        }
     }
 
     // toString
@@ -72,7 +82,9 @@ class Player(
                 if(attacks_hit_all_opponents_until_next_turn){
                     ret += "    attacks hit all opponents until next turn\n"
                 }
-
+                if(invulnerable_to_opponent_cards_until_next_turn){
+                    ret += "    invulnerable to opponents' cards until next turn\n"
+                }
                 
                 ret += "    field:\n"
                 if(field.size == 0){
@@ -96,9 +108,11 @@ class Player(
         return ret.dropLast(1)
     }
 
-    // read and write
+    // IO read and write
 
     fun readln():String?{ // result is `null` if player has disconnected
+        require(input != null)
+
         write("> ")
         write_flush()
 
@@ -110,16 +124,21 @@ class Player(
         }
         return red
     }
-    fun write(text:String){
+
+    open fun write(text:String){
+        require(output != null)
         output.write(text)
         // output.flush()
     }
+
     fun writeln(line:String=""){
         // output.println(line)
         write("${line}\n")
         write_flush()
     }
-    fun write_flush(){
+
+    open fun write_flush(){
+        require(output != null)
         output.flush()
     }
 
@@ -141,7 +160,7 @@ class Player(
 
     // choice selection
 
-    fun <T> choice(info:String, choices:Array<T>):T?{
+    open fun <T> choice(info:String, choices:Array<T>):T?{
         writeln()
         writeln("make a choice: ${info}")
 
@@ -302,17 +321,21 @@ class Player(
 
     fun select_name_and_class(board:Board){
         write_t1("welcome to the cum zone")
-        writeln("what's your name?")
-        val selected_name = readln()
+        val selected_name = select_name()
         if(selected_name == null){
-            return
+            return // user disconnected
         }
         name = selected_name
 
         select_class(board)
     }
 
-    fun select_class(board:Board){
+    open fun select_name():String?{
+        writeln("what's your name?")
+        return readln()
+    }
+
+    open fun select_class(board:Board){
         while(true){
             val selected:Class? = choice("select class", board.all_classes)
             if(selected == null){ // the little bitch disconnected in the class selection screen
@@ -342,6 +365,11 @@ class Player(
     // game stuff
 
     fun on_damaged(damage:Int, damager:Player){ // TODO rename to `damage` or `get_damage` or smt
+        if(invulnerable_to_opponent_cards_until_next_turn){
+            if(damager != this){
+                return
+            }
+        }
         if(!damager.shield_penetration_until_end_of_turn){
             for(card in field){
                 if(card.shield > 0){
@@ -410,6 +438,7 @@ class Player(
         board.on_player_turn(this)
 
         attacks_hit_all_opponents_until_next_turn = false
+        invulnerable_to_opponent_cards_until_next_turn = false
 
         if(!ready){ // TODO we also need a way to disconect newly connected players (or do we?)
             return

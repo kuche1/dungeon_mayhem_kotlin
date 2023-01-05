@@ -35,7 +35,7 @@ open class Card(
         if(align_left){
             ret += "-"
         }
-        ret += "26s" // TODO do something about this fucking retarded shit, hardcoding this is cancer
+        ret += "28s" // TODO do something about this fucking retarded shit, hardcoding this is cancer
         ret = ret.format(name)
 
         ret += " <"
@@ -1291,6 +1291,7 @@ class Clever_disguise(original_owner:Player,):Card(original_owner,
 ){
     override fun special_effect(caster:Player, board:Board){
         require(false){"not implemented"}
+        caster.invulnerable_to_opponent_cards_until_next_turn = true
     }
 }
 

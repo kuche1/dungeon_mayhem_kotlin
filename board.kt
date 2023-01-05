@@ -240,7 +240,11 @@ class Board(){
                 kick_disconnected_players()
                 var ready = 0
                 var unready = 0
+                var bots = 0
                 for(player in players){
+                    if(player.is_bot){
+                        bots += 1
+                    }
                     if(player.ready){
                         ready += 1
                     }else{
@@ -248,11 +252,15 @@ class Board(){
                     }
                 }
                 if(unready > 0){
-                    writeln("waiting for ${unready} player(s) to ready up")
+                    writeln("waiting for ${unready} player(s) to ready up...")
                     continue
                 }
                 if(ready <= 1){
                     writeln("only ${ready} player connectied, waiting for players...")
+                    continue
+                }
+                if(bots == ready){
+                    writeln("only bots connected...")
                     continue
                 }
                 break
