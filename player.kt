@@ -406,6 +406,15 @@ open class Player( // `open` since we want to be able to inherit the bots off of
 
     fun on_game_end(board:Board){
         ready = false
+        // discard all cards on field
+        for(card in field){
+            card.discard()
+        }
+        // discard hand
+        for(card in hand){
+            card.discard()
+        }
+        // select class
         Thread{
             select_class(board)
         }.start()

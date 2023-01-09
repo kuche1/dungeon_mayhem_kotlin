@@ -109,13 +109,13 @@ open class Card(
         // restore the internal state in case anyone needs to take the card out of the discard pile
         shield = shield_max
         // add to discard pile
+        discard()
+    }
+
+    fun discard(){
         if(!dont_add_to_discard_on_destroy){
             owner.add_card_to_discard(this)
         }
-    }
-
-    fun discard(){ // TODO use this!!!
-
     }
 
     open fun on_destroy_special_effect(destroyer:Player){
