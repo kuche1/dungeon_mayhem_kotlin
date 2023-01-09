@@ -8,6 +8,7 @@
 // spectators
 // not being able to join in the middle of the game
 // show owner in card selection
+// move classes into seperate files
 
 package dungeon_mayhem
 
@@ -20,7 +21,7 @@ import bot.Bot
 
 private fun add_bot(board:Board){
     val bot = Bot()
-    board.players += bot
+    board.add_player(bot)
     bot.select_name_and_class(board)
 }
 
@@ -28,7 +29,7 @@ private fun accept_new_connections(server:ServerSocket, board:Board){
     while(true){
         val sock = server.accept()
         val player = Player(sock=sock)
-        board.players += player
+        board.add_player(player)
         Thread{
             player.select_name_and_class(board)
         }.start()

@@ -145,10 +145,7 @@ class Fireball(
     desc="Each player (including you) takes 3 damage!",
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){
-            if(player.is_dead()){
-                continue
-            }
+        for(player in board.get_vulnerable_players()){
             player.on_damaged(3, caster)
         }
     }
@@ -442,8 +439,8 @@ class Praise_me(
     desc="Each opponent can choose to praise your greatness. ${ICON_DMG} ${ICON_DMG} those who choose not to."
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){
-            if(player.is_dead() || player == caster){
+        for(player in board.get_vulnerable_players()){
+            if(player == caster){
                 continue
             }
             // TODO this is retarded and needs to be multithreaded
@@ -486,11 +483,7 @@ class Death_ray(
     desc="${ICON_DMG} ${ICON_DMG} each opponent with no ${ICON_SHIELD} cards in play. Then destroy all ${ICON_SHIELD} cards - including yours!"
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){
-            if(player.is_dead()){
-                continue
-            }
-
+        for(player in board.get_vulnerable_players()){
             var to_destroy = player.get_shield_cards_on_field()
             if(to_destroy.size == 0){
                 if(player != caster){
@@ -641,8 +634,8 @@ class Tell_me_about_your_mother(
     desc="Add the top card of each opponent's discard pile to your hand."
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){
-            if(player.is_dead()){
+        for(player in board.get_vulnerable_players()){
+            if(player == this.owner){
                 continue
             }
             val last_card = player.pop_last_card_from_discard()
@@ -804,10 +797,8 @@ class Owlbear_boogie(original_owner:Player,):Card(original_owner,
     desc="Each player may do a little dance and then ${ICON_DRAW}. You ${ICON_DRAW} for each player who danced.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){ // TODO this is retarded and needs to be multithreaded
-            if(player.is_dead()){ // if can also decide to draw for yourself
-                continue
-            }
+        for(player in board.get_vulnerable_players()){ // TODO this is retarded and needs to be multithreaded
+            // if can also decide to draw for yourself
             val choice = player.choice("do a little dance and ${ICON_DRAW}?", arrayOf("yes", "no"))
             if(choice == "yes"){
                 // TODO add multiple dances?
@@ -927,10 +918,7 @@ class Banishing_smite(original_owner:Player,):Card(original_owner,
     desc="Destroy all ${ICON_SHIELD} cards in play (including yours).",
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){
-            if(player.is_dead()){
-                continue
-            }
+        for(player in board.get_vulnerable_players()){
             val shield_cards = player.get_shield_cards_on_field()
             for(card in shield_cards){
                 card.destroy(caster)
@@ -1019,8 +1007,8 @@ class Hostile_takeover(original_owner:Player,):Card(original_owner,
 ){
     override fun special_effect(caster:Player, board:Board){
         // 1 dmg to all
-        for(player in board.players){
-            if(player.is_dead() || player == caster){
+        for(player in board.get_vulnerable_players()){
+            if(player == caster){
                 continue
             }
             player.on_damaged(1, caster)
@@ -1061,10 +1049,7 @@ class Murderous_and_acquisitions(original_owner:Player,):Card(original_owner,
     desc="Each player must ${ICON_DMG}, ${ICON_HEAL}, or ${ICON_DRAW}. Start with you and go right. You repeat all choices.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){ // TODO multithread this
-            if(player.is_dead()){
-                continue
-            }
+        for(player in board.get_vulnerable_players()){ // TODO multithread this
             val choice = player.choice("select action", arrayOf(ICON_DMG, ICON_HEAL, ICON_DRAW))
             when(choice){
                 ICON_DMG->{
@@ -1290,7 +1275,6 @@ class Clever_disguise(original_owner:Player,):Card(original_owner,
     desc="None of your opponents' cards affect you or your ${ICON_SHIELD} cards until your next turn.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        require(false){"not implemented"}
         caster.invulnerable_to_opponent_cards_until_next_turn = true
     }
 }
@@ -1392,10 +1376,7 @@ class Whirling_axes(original_owner:Player,):Card(original_owner,
     desc="You ${ICON_HEAL} once per opponent, then ${ICON_DMG} each opponent.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){
-            if(player.is_dead()){
-                continue
-            }
+        for(player in board.get_vulnerable_players()){
             caster.heal(1)
             player.on_damaged(1, caster)
         }
@@ -1409,10 +1390,7 @@ class Battle_roar(original_owner:Player,):Card(original_owner,
     desc="Each player (including you) discards their hand, then draws three cards.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        for(player in board.players){
-            if(player.is_dead()){
-                continue
-            }
+        for(player in board.get_vulnerable_players()){
             player.discard_hand()
             player.draw()
             require(player.get_hand_size() == 3)

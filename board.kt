@@ -8,9 +8,15 @@ import colors.*
 
 class Board(){
     val all_classes = ALL_CLASSES
-    var players:MutableList<Player> = mutableListOf()
+    private var players:MutableList<Player> = mutableListOf()
     var dmg_cards_target:Player? = null
     var dmg_cards_target_until_players_next_turn:Player? = null
+
+    // player management
+
+    fun add_player(player:Player){
+        players += player
+    }
 
     // writing
 
@@ -56,6 +62,22 @@ class Board(){
             player.writeln()
             player.writeln(player.toString(show_private=true))
         }
+    }
+
+    // getter
+
+    fun get_vulnerable_players():Array<Player>{ // TODO what about effects that require only reading
+        var targets:Array<Player> = arrayOf()
+        for(player in players){
+            if(player.is_dead()){
+                continue
+            }
+            if(player.invulnerable_to_opponent_cards_until_next_turn){
+                continue
+            }
+            targets += player
+        }
+        return targets
     }
 
     // on event
@@ -105,7 +127,7 @@ class Board(){
 
     fun choose_player(caster:Player, except:Player?=null):Player?{
         val targets:Array<Player> = arrayOf()
-        for(player in players){
+        for(player in get_vulnerable_players()){
             if(player.is_dead()){
                 continue
             }
@@ -118,8 +140,8 @@ class Board(){
 
     fun choose_opponent(caster:Player, except:Player?=null):Player?{
         var targets:Array<Player> = arrayOf()
-        for(player in players){
-            if(player.is_dead() || player == caster){
+        for(player in get_vulnerable_players()){
+            if(player == caster){
                 continue
             }
             if(except != null){
@@ -157,7 +179,7 @@ class Board(){
 
     fun choose_shield_card(caster:Player):Card?{
         var targets:Array<Card> = arrayOf()
-        for(player in players){
+        for(player in get_vulnerable_players()){
             if(player.is_dead()){
                 continue
             }
@@ -171,7 +193,7 @@ class Board(){
 
     fun choose_opponents_shield_card(caster:Player):Card?{
         var targets:Array<Card> = arrayOf()
-        for(player in players){
+        for(player in get_vulnerable_players()){
             if(player.is_dead() || player == caster){
                 continue
             }
@@ -191,7 +213,7 @@ class Board(){
     }
 
     fun damage_player(caster:Player, damage:Int){
-        var targets:Array<Player> = arrayOf()
+        var targets:MutableList<Player> = mutableListOf()
 
         if(caster.attacks_hit_all_opponents_until_next_turn){
             for(player in players){
@@ -209,7 +231,7 @@ class Board(){
         }
 
         if(dmg_cards_target == null){
-            for(player in players){ // TODO we're kinda duplicating code here...
+            for(player in players){
                 if(player.is_dead()){
                     continue
                 }
@@ -223,7 +245,16 @@ class Board(){
             targets += dmg_cards_target!! // 2 bitches talked me into bending the rules so that the attacker can also be the target
         }
 
-        val target:Player? = caster.choice("select attack target", targets)
+        var idx = targets.size
+        while(idx > 0){
+            val target = targets[idx]
+            if(target.invulnerable_to_opponent_cards_until_next_turn){
+                targets -= target
+            }
+            idx -= 1
+        }
+
+        val target:Player? = caster.choice("select attack target", targets.toTypedArray())
         if(target == null){
             return
         }

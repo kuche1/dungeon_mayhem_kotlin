@@ -31,7 +31,7 @@ open class Player( // `open` since we want to be able to inherit the bots off of
     var thunder:Int = 0
     // bot stuff
     val is_bot:Boolean
-    // card effects
+    // state / card effects
     var shield_penetration_until_end_of_turn:Boolean = false
     var attacks_hit_all_opponents_until_next_turn:Boolean = false
     var invulnerable_to_opponent_cards_until_next_turn:Boolean = false // TODO effect not fully implemented
@@ -266,8 +266,6 @@ open class Player( // `open` since we want to be able to inherit the bots off of
             shuffle_discard_into_deck()
         }
 
-        // TODO not sure if this is fast or slow
-        // we could switch it up for the last card instead
         val card = deck[0]
         deck.remove(card)
         return card
@@ -430,6 +428,7 @@ open class Player( // `open` since we want to be able to inherit the bots off of
     fun is_alive():Boolean{
         return hp > 0
     }
+
     fun is_dead():Boolean{
         return !is_alive()
     }
