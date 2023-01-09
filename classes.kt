@@ -252,7 +252,7 @@ class Class_mimi_lechaise:Class(
 }
 
 class Class_oriax:Class(
-    name = "Oriax (unplayable) (1 effect missing)",
+    name = "Oriax",
     color = COL_MAGENTA_DARK,
 ){
     override fun generate_deck_uncked(p:Player):Array<Card>{

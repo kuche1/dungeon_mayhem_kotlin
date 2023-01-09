@@ -245,7 +245,7 @@ class Board(){
             targets += dmg_cards_target!! // 2 bitches talked me into bending the rules so that the attacker can also be the target
         }
 
-        var idx = targets.size
+        var idx = targets.size - 1
         while(idx > 0){
             val target = targets[idx]
             if(target.invulnerable_to_opponent_cards_until_next_turn){
