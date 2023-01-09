@@ -464,6 +464,7 @@ class Charm_ray(
         }
         board.set_dmg_cards_target_until_players_next_turn(target, caster)
         // TODO make it so that the card stays on the board
+        // same goes for other cards of this type
     }
 }
 
