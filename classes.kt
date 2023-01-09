@@ -53,7 +53,7 @@ open class Class(
         var printed:Array<String> = arrayOf()
         for(card in deck){
             if(card.name !in printed){ // this might be retarded
-                player.writeln(card.toString(show_occur=true, align_left=false))
+                player.writeln("    " + card.toString(show_occur=true))
                 printed += card.name
             }
         }

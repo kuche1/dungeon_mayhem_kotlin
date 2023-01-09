@@ -30,15 +30,8 @@ open class Card(
     override fun toString():String{
         return toString(show_occur=false)
     }
-    fun toString(show_occur:Boolean=false, align_left:Boolean=true):String{
-        var ret = "%"
-        if(align_left){
-            ret += "-"
-        }
-        ret += "28s" // TODO do something about this fucking retarded shit, hardcoding this is cancer
-        ret = ret.format(name)
-
-        ret += " <"
+    fun toString(show_occur:Boolean=false):String{
+        var ret = ""
         if(show_occur){
             ret += " | occurances:${occur}"
         }
@@ -60,8 +53,8 @@ open class Card(
         if(desc != ""){
             ret += " | ${desc}"
         }
-        ret += " | >"
-        return ret
+        ret += " ${COL_MAGENTA_BRIGHT}>>${COL_RESET} ${name}"
+        return ret.drop(3) // remove ` | `
     }
 
     fun copy(original_owner:Player):Card{
