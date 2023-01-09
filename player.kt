@@ -448,7 +448,7 @@ open class Player( // `open` since we want to be able to inherit the bots off of
         attacks_hit_all_opponents_until_next_turn = false
         invulnerable_to_opponent_cards_until_next_turn = false
 
-        if(!ready){ // TODO we also need a way to disconect newly connected players (or do we?)
+        if(!ready){
             return
         }
         if(is_dead()){
