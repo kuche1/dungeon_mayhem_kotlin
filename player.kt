@@ -34,7 +34,7 @@ open class Player( // `open` since we want to be able to inherit the bots off of
     // state / card effects
     var shield_penetration_until_end_of_turn:Boolean = false
     var attacks_hit_all_opponents_until_next_turn:Boolean = false
-    var invulnerable_to_opponent_cards_until_next_turn:Boolean = false // TODO effect not fully implemented
+    var invulnerable_to_opponent_cards_until_next_turn:Boolean = false
 
     init{
         this.is_bot = is_bot
