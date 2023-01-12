@@ -7,8 +7,7 @@
 // ghosts
 // spectators
 // not being able to join in the middle of the game
-// show owner in card selection
-// move classes into seperate files
+// move classes cards into seperate files
 // show damage target
 // show card owner (is currently ugly)
 

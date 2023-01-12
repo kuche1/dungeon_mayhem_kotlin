@@ -128,9 +128,6 @@ class Board(){
     fun choose_player(caster:Player, except:Player?=null, info:String?=null):Player?{
         var targets:Array<Player> = arrayOf()
         for(player in get_vulnerable_players()){
-            if(player.is_dead()){
-                continue
-            }
             if(player == except){
                 continue
             }
@@ -141,6 +138,16 @@ class Board(){
             text += ": " + info
         }
         return caster.choice(text, targets)
+    }
+
+    fun choose_player_damagable_by_ghost(caster:Player, info:String):Player?{
+        var targets:Array<Player> = arrayOf()
+        for(player in get_vulnerable_players()){
+            if(player.hp > 1){
+                targets += player
+            }
+        }
+        return caster.choice(info, targets)
     }
 
     fun choose_opponent(caster:Player, except:Player?=null):Player?{

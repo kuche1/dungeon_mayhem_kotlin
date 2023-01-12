@@ -452,7 +452,11 @@ open class Player( // `open` since we want to be able to inherit the bots off of
             return
         }
         if(is_dead()){
-            // TODO deal 1 dmg to someone
+            val target = board.choose_player_damagable_by_ghost(this, "deal ${ICON_DMG} to a player")
+            if(target == null){
+                return
+            }
+            target.on_damaged(1, this)
             return
         }
         draw()
