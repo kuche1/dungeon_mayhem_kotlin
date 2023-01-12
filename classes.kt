@@ -53,7 +53,7 @@ open class Class(
         var printed:Array<String> = arrayOf()
         for(card in deck){
             if(card.name !in printed){ // this might be retarded
-                player.writeln("    " + card.toString(show_occur=true))
+                player.writeln("    " + card.toString(show_occur=true, show_owner=false))
                 printed += card.name
             }
         }
@@ -228,7 +228,7 @@ class Class_lord_cinderpuff:Class(
 }
 
 class Class_mimi_lechaise:Class(
-    name = "Mimi LeChaise (unplayable)",
+    name = "Mimi LeChaise",
     color = COL_GREEN_DARK,
 ){
     override fun generate_deck_uncked(p:Player):Array<Card>{

@@ -91,14 +91,14 @@ open class Player( // `open` since we want to be able to inherit the bots off of
                     ret += "        no cards on field\n"
                 }else{
                     for(card in field){
-                        ret += "        ${card}\n"
+                        ret += "        ${card.toString(show_owner=false)}\n"
                     }
                 }
 
                 if(show_private){
                     ret += "    hand:\n"
                     for(card in hand){
-                        ret += "        ${card}\n"
+                        ret += "        ${card.toString(show_owner=false)}\n"
                     }
                 }
             }else{

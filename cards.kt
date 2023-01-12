@@ -30,7 +30,7 @@ open class Card(
     override fun toString():String{
         return toString(show_occur=false)
     }
-    fun toString(show_occur:Boolean=false):String{
+    fun toString(show_occur:Boolean=false, show_owner:Boolean=true):String{
         var ret = ""
         if(show_occur){
             ret += " | occurances:${occur}"
@@ -53,12 +53,18 @@ open class Card(
         if(desc != ""){
             ret += " | ${desc}"
         }
-        ret += " ${COL_MAGENTA_BRIGHT}>>${COL_RESET} ${name}"
+
+        ret += " ${COL_MAGENTA_BRIGHT}<<${COL_RESET} ${name}"
+
+        if(show_owner){
+            ret += " ${COL_MAGENTA_BRIGHT}>>${COL_RESET} ${owner.toString(short=true)}"
+        }
+
         return ret.drop(3) // remove ` | `
     }
 
-    fun copy(original_owner:Player):Card{
-        for(card in original_owner.class_.generate_deck(original_owner)){
+    fun copy(new_owner:Player):Card{
+        for(card in original_owner.class_.generate_deck(new_owner)){
             if(card.name == name){
                 // copy internal state
                 card.shield = shield
@@ -66,7 +72,7 @@ open class Card(
             }
         }
         require(false)
-        return Card(original_owner, occur=1) // never reached
+        return Card(new_owner, occur=1) // never reached
     }
 
     fun summon(player:Player, board:Board){
@@ -1173,19 +1179,17 @@ class Its_not_a_trap(original_owner:Player,):Card(original_owner,
     desc="Make one player's hit points equal to another player's hit points.",
 ){
     override fun special_effect(caster:Player, board:Board){
-        caster.writeln("select a player to get the HP from")
-        val from = board.choose_player(caster)
+        val from = board.choose_player(caster, info="select a player to get the HP from")
         if(from == null){
             return
         }
 
-        caster.writeln("select a player to set the HP to")
-        val to = board.choose_player(caster, except=from)
+        val to = board.choose_player(caster, except=from, info="select a player to set the HP to")
         if(to == null){
             return
         }
         
-        from.hp = to.hp
+        to.hp = from.hp
     }
 }
 

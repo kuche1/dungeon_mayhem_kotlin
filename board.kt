@@ -125,8 +125,8 @@ class Board(){
 
     // choosing
 
-    fun choose_player(caster:Player, except:Player?=null):Player?{
-        val targets:Array<Player> = arrayOf()
+    fun choose_player(caster:Player, except:Player?=null, info:String?=null):Player?{
+        var targets:Array<Player> = arrayOf()
         for(player in get_vulnerable_players()){
             if(player.is_dead()){
                 continue
@@ -134,8 +134,13 @@ class Board(){
             if(player == except){
                 continue
             }
+            targets += player
         }
-        return caster.choice("select a player", targets)
+        var text = "select a player"
+        if(info != null){
+            text += ": " + info
+        }
+        return caster.choice(text, targets)
     }
 
     fun choose_opponent(caster:Player, except:Player?=null):Player?{
@@ -144,10 +149,8 @@ class Board(){
             if(player == caster){
                 continue
             }
-            if(except != null){
-                if(player == except){
-                    continue
-                }
+            if(player == except){
+                continue
             }
             targets += player
         }
